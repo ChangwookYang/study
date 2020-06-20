@@ -1,0 +1,707 @@
+1강 스프링 프레임워크 개요
+	- 스프링 프레임워크에서 제공하는 모듈
+		○ Spring-core
+		스프링의 핵심인 DI(Dependency Injection)와 IoC(Inversion of Control)제공
+		○ Spring-aop
+		AOP구현 기능 제공
+		○ Spring-jdbc
+		데이터베이스를 쉽게 다룰 수 있는 기능 제공
+		○ Spring-tx
+		스프링에서 제공하는 트랜잭션 관련 기능 제공
+		○ Spring-webmvc
+		스프링에서 제공하는 컨트롤러와 뷰를 이용한 스프링 MVC구현 기능 제공
+
+	- 스프링 컨테이너
+	스프링에서 객체를 생성하고 조립하는 컨테이너로, 컨테이너를 통해 생성된 객체를 빈(Bean)이라고 부른다.
+	XML문서(객체생성 및 속성 데이터 작성) -> 스피링컨테이너에서 객체(Bean) 생성 및 조립 -> 개발문서(어플리케이션 구현)
+
+3강 스프링 프로젝트 생성
+	- Maven Project 생성
+	- Group Id(큰 브랜드 이름), Artifact Id(브랜드의 지점같은 느낌)
+	Ex) 스피링 4.0 버전은 Group Id에 속하고, Spring-core, spring-aop와 같은 모듈은 Artifact Id에 속한다.
+	- pom.xml
+	필요한 모듈을 가져오기위한 파일
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework</groupId> -- 그룹에있는
+			<artifactId>spring-context</artifactId> -- 모듈
+			<version>4.1.0.RELEASE</version>  -- 버전
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-complier-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>utf-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+	- 대략적인 Spring 프로젝트 구조로 프로젝트 > src > main
+	여기에 java, resources로 나뉘는데 java는 실제로 구현하는 java 파일들, resources는 환경설정에 필요한 설정파일(자원)들이 들어있다.
+	
+	- Pom.xml 파일은 메이븐 설정파일로 메이븐은 라이브러리를 연결해주고, 빌드를 위한 플랫폼이다.
+	Pom.xml에 의해서 필요한 라이브러리만 Repository에 접근 후, 다운로드해서 사용한다.
+	
+4강 처음해보는 스프링프로젝트
+	- applicationContext.xml
+	- <beans xmlns="http://www.springframework.org/schema/beans" …>
+		<bean id="tWalk" class="testPject.TranspotationWalk" />
+		<bean id="아이디" class-"패키지명.클래스명" />
+	</beans>
+	- Bean에서 만든 객체는 new로 생성할필요 없이 태그에 의해서 자동으로 생성되어 메모리에 로드되어있다.
+	- 메모리에 로드되어있다 -> 객체를 담고 있는 곳을 바로 스프링 컨테이너라고 한다.
+	- Spring container에 접근
+	GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:applicationContext.xml");
+	(컨테이너를 생성)
+	TranspotationWalk tWalk = ctx.getBean("tWalk", Transportation.class);  // 컨테이너로부터 bean을 가져옴
+	ctx.close(); // 사용한 외부자원은 반드시 닫아줘야한다.
+	
+5강 또다른 프로젝트 생성방법(로컬에서 디렉토리 생성)
+	- pom.xml만 생성하고 import 하였는데, 프로젝트 구성이 동일하게 생성이 됨
+
+6강 DI (Dependency Injection)
+	- DI(Dependency Injection 이란?
+	Ex) 배터리 일체형과, 배터리 분리형 <- 모두 다 주입형이다. 방식이 다르다.
+	 - 배터리 일체형
+	public class ElectronicCar {
+		private Battery battery;
+		public ElectronicCar(){
+			Battery = new NormalBattery();
+		}
+	}
+	 - 배터리 분리형
+	유형1)
+	public class ElectronicRobot {
+		private Battery battery;
+		public ElectronicEobot( ) { }
+		public void setBattery(Battery battery){
+			this.battery = battery;
+		}
+	}
+	
+	유형2)
+	public class ElectronicRobot {
+		private Battery battery;
+		public ElectronicEobot(Battery battery){
+			this.battery = battery;
+		}
+		public void setBattery(Battery battery){
+			this.battery = battery;
+		}
+	}
+	
+	- 스프링 DI설정방법
+	Public StudentRegisterService(StudentDao studentDao){
+	    this.studentDao = studentDao;
+	}
+	<bean id="studentDao" class="ems.member.dao.StudentDao"></bean>
+	<bean id="registerService" class="ems.member.service.StudentRegisterService">
+	    <constructor-arg ref="studentDao"></constructor-arg>
+	</bean>
+
+7강 다양한 의존객체 주입
+	- 생성자를 이용한 의존 객체 주입
+	Public StudentRegisterService(StudentDao studentDao){
+	    this.studentDao = studentDao;
+	}
+	<bean id="studentDao" class="ems.member.dao.StudentDao"></bean>
+	<bean id="registerService" class="ems.member.service.StudentRegisterService">
+	    <constructor-arg ref="studentDao"></constructor-arg>
+	</bean>
+	
+	- Set를 이용한 의존 객체 주입
+	public void setJdbcUrl(String jdbcUrl){
+	   this.jdbcUrl = jdbcUrl;
+	}
+	
+	<bean id="dataBaseConnectionInfoDev" class="ems.member.DataBaseConnectionInfo">
+	     <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe" />
+	</bean>
+	
+	- List타입 의존객체 주입
+	public void setDevelopers(List<String> developers){
+	   this.developers = developers;
+	}
+	
+	<property name="developer">
+	  <list>
+	     <value>Cherry</value>
+	     <value>Cloy</value>
+	  </list>
+	</property>
+	
+	- Map 타입 의존객체 주입
+	public void setDevelopers(List<String> developers){
+	   this.developers = developers;
+	}
+	
+	<property name="administrators">
+	  <map>
+		<entry>
+		   <key><value>Cheney</value>
+		   <value>cheney@spring.org</value>
+		</entry 
+	  </map>
+	</property>
+	
+8강 스프링설정 파일 분리
+	- 기존의 applicationContext.xml을 appCtx1.xml, appCtx2.xml, appCtx3.xml 3개로 분리
+	- String[] appCtxs = {"classpath:appCtx1.xml", "classpath:appCtx2.xml", "classpath:appCtx3.xml" };
+	GenericXmlApplicationContext ctx = new GenericXmlApplicationContext(appCtxs);
+	- Xml 파일에서도 별도 설정파일들을 import해서 사용가능
+	<import resource="classpath:appCtx2.xml"/>
+	- Bean의 범위
+	 - 싱클톤(Singleton) : 스프링 컨테이너에서 생성된 빈(Bean) 객체의 경우 동일한 타입에 대해서는 기본적으로 한개만 생성되며, getBean() 메소드로 호출될 때 동일한 객체가 반환된다.
+	 - 프로토타입(Prototype) : 싱글톤 범위와 반대의 개념이다. 프로토타입의 경우 개발자는 별도로 설정을 해줘야하는데, 스프링 설정파일에서의 빈(Bean)객체를 정의할 때 scope속성을 명시해주면 된다.
+	
+9강 의존객체 자동 주입
+	- 의존객체 자동 주입이란?
+	스프링 설정 파일에서 의존 객체를 주입할 때 <constructor-org> 또는 <property> 태그로 의존대상 객체를 명시하지 않아도 스프링 컨테이너가 자동으로 필요한 의존대상 객체를 찾아서 의존대상 객체가 필요한 객체에 주입해주는 기능이다.
+	구현 방법은 @Autowired와 @Resource 어노테이션을 이용해서 쉽게 구현할 수 있다.
+	- @Autowired
+	주입하려고 하는 객체의 타입이 일치하는 객체를 자동으로 주입한다.
+	<bean id="registerService" class="ems.member.service.StudentRegisterService">
+	    <constructor-arg ref="studentDao"></constructor-arg>
+	</bean>
+	
+	*수정본
+	<context:annotation-config />
+	<bean id="registerService" class="ems.member.service.StudentRegisterService">
+	    <!-- <constructor-arg ref="studentDao"></constructor-arg> --> <!-- 알아서 studentDao에 주입하도록 주석처리 -->
+	</bean>
+	@Autowired       
+	Public StudentRegisterService(StudentDao studentDao) {
+		this.studentDao = studentDao;  
+	}
+	// @Autowired가 없다면 registerService bean을 생성할때 NotDefinitionBean 에러가 떨어진다.
+	// @Autowired가 있어서 자기의 설정 파일안에 studentDao로 생성된 객체가 있는지 찾는다.
+	// 필요한 bean객체를 넣어준다(동일한 타입)
+	- property나 method에 @Autowired를 지정하고 싶으면 반드시 디폴트 생성자가 필요하다.(객체가 먼저 생성되어야 값을 지정할 수 있으므로)
+
+	- @Resource
+	// 필요한 bean객체를 넣어준다(동일한 이름)
+	// Resource는 생성자에 넣지 못하고 프로퍼티에만 사용가능하다.
+	// 마찬가지로 디폴트생성자가 꼭 필요하다.
+	
+10강 의존객체 선택
+	- 동일한 객체가 2개 이상인 경우 스프링 컨테이너는 자동 주입대상 객체를 판단하지 못해서 NoUniqueBeanDefinitionException을 발생시킨다.
+	<bean id="wordDao" class="com.word.dao.WordDao">
+	    <qualifier value="usedDao" />
+	</bean>
+	- @Autowired
+	@Qualifier("usedDao")
+	Private WordDao wordDao;
+	- NoUniqueBeanDefinitionException 케이스
+	<bean id="wordDao1" class="com.word.dao.WordDao" />
+	<bean id="wordDao2" class="com.word.dao.WordDao" />
+	<bean id="wordDao3" class="com.word.dao.WordDao" />
+	- @Inject : @Autowired와 거의 비슷하게 @Inject 어노테이션을 이용해서 의존객체를 자동으로 주입할 수 있다.
+	     @Autowired와 차이점이라면 @Autowired의 경우 required 속성을 통해서 의존 대상 객체가 없어도 Exception을 피할 수 
+	    있지만, @Inject의 경우 required 속성을 지원하지 않는다. 또한 @Qualifier 대신 @Named(value="wordDao")를 사용한다.
+	
+
+11강 생명주기(Life Cycle)
+	- 스프링 컨테이너의 생명주기
+		A. 컨테이너 생성 : GenericXmlApplicationContext를 이용한 스프링 컨테이너 초기화(생성)
+	GenericXmlApplicationContext ctx = new GenericXmlApplicationContext("classpath:appCtx.xml");
+		B. getBean()을 이용한 빈(Bean) 객체 이용
+	BookRegisterService bookRegisterService = ctx.getBean("bookRegisterService", BookRegisterService.class);
+		C. ctx.close() : close()를 이용한 스프링 컨테이너 종료
+	- 빈(Bean) 객체의 생명주기는 스프링 컨테이너의 생명주기와 같이한다.
+	스프링컨테이너 초기화(Bean 객체 생성 및 주입) -> 스프링컨테이너 종료(Bean 객체 소멸)
+	- 스프링 생명주기를 활용하여 특정시간에 작업할 수 있다.(DB 권한 체크 혹은 네트워크 연결 등)
+	- Interface를 활용한 Bean 생명주기 특정시간에 작업하기
+		○ <context:annotation-config />
+		<bean id="bookDao" class="com.brms.book.dao.BookDao"/>
+		<bean id="bookRegistService" class="com.brms.book.service.BookRegistService"/>
+		○ Public class BookRegistService implements InitializingBean, DisposableBean {
+			@Autowired
+			private BookDao bookDao;
+			public BookRegistService() { }
+			public void register(Book book){
+				bookDao.insert(book);
+			}
+			
+			@Override
+			public void afterPropertiesSet() throws Exception  {
+				Sysout("bean 객체 생성");
+			}
+			
+			@Override
+			public void destroy() throws Exception {
+				Sysout("bean 객체 소멸");
+			}
+		}
+	- Init-method, destroy-method 속성을 활용한 특정시간에 작업하기
+		○ <bean id="bookRegistService" class="com.brms.book.service.BookRegistService" init-method="initMethod" destroy-method="destroyMethod" />
+		○ Public class BookRegistService {
+			@Autowired
+			private BookDao bookDao;
+			public BookRegistService() { }
+			public void register(Book book){
+				bookDao.insert(book);
+			}
+			public void initMethod(Book book){
+				Sysout("bean 객체 생성");
+			}
+			public void destroyMethod(Book book){
+				Sysout("bean 객체 소멸");
+			}
+		}
+		
+12-1강 어노테이션을 이용한 스프링설정 -1
+	- @Configuration
+	public class MemberConfig {
+		// <bean id="studentDao" class="ems.member.dao.StudentDao" />
+		@Bean
+		public StudentDao studentDao() {
+			return new StudentDao();
+		}
+		
+		/*
+		<bean id="registerService" class="ems.member.service.StudentRegisterService">
+			<constructor-arg ref="studentDao"></constructor-arg>
+		</bean>
+		*/
+		@Bean
+		public StudentRegisterService registerService(){
+			return new StudentRegisterService(studentDao());
+		}
+		
+		/*
+		<bean id="databaseConnectionInfoDev" class="ems.member.DatabaseConnectionInfo">
+			<property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe" />
+			<property name="userId" value="scott" />
+		</bean>
+		*/
+		@Bean
+		public DatabaseConnectionInfo databaseConnectionInfo(){
+			DatabaseConnectionInfo infoDev = new DatabaseConnectionInfo();
+			infoDev.setJdbcUrl("jdbc:oracle:thin:@localhost:1521:xe");
+			infoDev.setUserId("scott");
+		}
+	}
+	
+12-2강 어노테이션을 이용한 스프링설정 -2
+	- @Autowired
+	DataBaseConnectionInfo dataBaseConnectionInfoDev;
+	@Autowired
+	DataBaseConnectionInfo dataBaseConnectionInfoReal;
+	
+	- @Configuration로 여러 파일을 만들어서 Import하는 방법은 간단하다.
+	여러 파일이 있지만 하나의 스프링 컨테이너에 Bean 객체들을 생성한것과 다름이 없다.
+	@Autowired를 통하여 이미 선언되어있는 DataBaseConnectionInfo에 해당하는 Bean 객체를 가져와서
+	자동주입함으로써 Import할 수 있다.
+	- 다른 방법으로는 class를 Import 한다.
+	@Configuration
+	@Import({MemberConfig2.class, MemberConfig3.class})
+	public class MemberConfig {
+	
+	}
+	
+13강 웹프로그래밍 설계 모델
+
+	- Model 1의 단점으로, 리턴으로 html, java, jsp 다 들어있어서 소스 유지보수가 힘들다.
+
+	- MVC(Model, View,  Controller) 각각 모듈화되어 유지보수가 쉽다.
+	
+
+	1) 맨 처음 DispatcherServlet이 요청을 받는다.
+	2) DispatcherServlet은 HandlerMapping에게 가장 알맞은 Controller를 요청한다.
+	3) HandlerAdapter는 HandlerMapping을 통해 선택된 Controller에서 가장 적합한 Method를 찾아준다.
+	4) Controller, Service, DB 등의 작업을 통하여 HandlerAdapter를 통해 받은 Model을 DispatcherServlet은 ViewResovler에 보내준다.
+	5) ViewResolver는 가장 적합한 JSP(View)를 찾아준다.
+	6) 응답(View)을 클라이언트에 보내준다.
+
+	- DispatcherServlet 설정
+	web.xml에 서블릿을 매핑(WEB-INF폴더에 web.xml파일을 만들고 <servlet>태그와 <servlet-mapping>태그를 이용한다.
+	<servlet>
+	   <servlet-name>서블릿 별칭</servlet-name>
+	   <servlet-class>서블릿명(패키지 이름을 포함한 전체 서블릿명)</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	   <servlet-name>서블릿명칭</servlet-name>
+	   <url-pattern>/매핑명<url-pattern>
+	</servlet-mapping>
+	
+	web.xml - DispatcherServlet 설정
+	<servlet>
+	   <servlet-name>appServlet</servlet-name>
+	   <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>     <!-- DispatcherServlet 서블릿 등록 -->
+	   <init-param>
+	      <param-name>contextConfigLocation</param-name>
+	      <param-name>/WEB-INF/spring/appServlet/servlet-context.xml</param-name>  <!-- 스프링 설정파일(컨테이너 생성) -->
+	   </init-param>
+	   <load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+	   <servlet-name>appServlet</servlet-name>
+	   <url-pattern>/<url-pattern>                   <!-- 모든 url 패턴에 대하여 수용 -->
+	</servlet-mapping>
+	
+	- Controller 객체(@Controller)
+	DispatcherServlet   <-   HandlerAdapter   ->  Controller
+	servlet-context.xml에 Controller어노테이션을 사용하기 위해서 <annotation-driven /> 추가
+	Controller 객체로 사용할 클래스 정의
+	@Controller
+	public class HomeController {
+		…
+	}
+	
+	- Controller 객체(@RequestMapping)
+	DispatcherServlet   <-   HandlerAdapter   ->  Controller
+	@RequestMapping("/success")      // http://localhost:8090/ch08/success
+	public String success(Model model) {
+		return "success";
+	}
+
+	- Controller 객체(Model 타입의 파라미터)
+	DispatcherServlet   <-   HandlerAdapter   ->  Controller
+	@RequestMapping
+	public String success(Model model) {
+		model.setAttribute("tempData", "model has data!!");
+	}
+		○ 개발자는 Model 객체에 데이터를 담아서 DispatcherServlet에 전달할 수 있다.
+		○ DispatcherServlet에 전달된 Model데이터는 View에서 가공되어 클라이언트한테 응답처리 된다.
+
+	- View 객체
+	DispatcherServlet   <-   ViewResolver   ->  View
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name-"prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+		○ InternalResourceViewResolver가 적합한 view를 찾아주는데
+		@RequestMapping("/success")  
+		public String success(Model model) {
+			return "success";
+		}
+		return해주는 success에 prefix값 /WEB-INF/view/를 붙이고 suffix값 .jsp를 붙여주고 리턴해준다.
+		
+	- 전체적인구조
+		A. 최초 사용자 요청 http://localhost:8090/ch08/success
+		B. DispatcherServlet이 요청을 받음
+		C. Controller : @Controller 어노테이션이 적용된 클래스 검색
+		D. 사용자 요청에 해당하는 메서드 실행 (ex: @RequestMapping("success") 어노테이션이 적용된 메서드 검색 및 실행)
+		E. View 검색 (ex: ViewResolver에 의해서 검색된 success.jsp 검색 및 실행)
+		F. View (ex: 브라우저에 JSP를 이용한 응답)
+
+14강 스프링 웹서비스 -1
+15강 스프링 웹서비스 -2
+
+	- webapp : 웹과 관련된 파일들
+	- spring : 스프링 설정 파일
+	- web.xml : 웹설정 파일(Dispatcher servlet을 등록하고 Dispatcher servlet에 servlet-context.xml을 등록한다.
+	- pom.xml : 메인 레파지토리에서 프로젝트에 필요한 라이브러리를 내려받기 위한 메이븐 설정 파일
+	- 사용자의 모든 요청을 Dispatcher Servlet이 받은 후 HandlerMapping 객체에 Controller 객체 검색을 요청한다. 그러면  HandlerMapping 객체는 프로젝트에 존재하는 모든 Controller 객체를 검색한다. HandlerMapping 객체가 Controller 객체를 검색해서 DispatcherServlet 객체에 알려주면 DispatcherServlet 객체는 다시 HandlerAdapter 객체에 사용자의 요청에 부합하는 메소드 검색을 요청한다. 그러면 HandlerAdapter 객체는 사용자의 요청에 부합하는 메소드를 찾아서 해당 Controller 객체의 메소드를 실행한다. Controller 객체의 메소드가 실행된 후 Controller 객체는 HandlerAdapter 객체에 ModelAndView 객체를 반환하는데 ModelAndView 객체에는 사용자 응답에 필요한 데이터정보와 뷰정보(JSP파일)가 담겨있다. 다음으로 HandlerAdapter 객체는 ModelAndView 객체를 다시 DispatcherServlet 객체에 반환한다.
+	
+16강 STS를 이용하지 않은 웹 프로젝트
+	- 수동으로 디렉토리들을 추가하여 STS 플러그인에서 제공하는 스피링구조와 동일한 형태로 구현
+
+17강 Service & Dao 객체 구현
+	- 서비스 객체 구현 3가지 방법
+	1) new 연산자를 이용한 service 객체 생성 및 참조
+	MemberService service = new MemberService();
+	2) 스프링 설정파일을 이용한 서비스 객체 생성 및 의존 객체 자동 주입
+	<beans:bean id="service" class="com.ho.ch09.member.service.MemberService"></beans:bean>
+	>>>>>>>>>>>>>
+	@Autowired
+	MemberService service;
+	3) 어노테이션을 이용해서 서비스 객체 생성 및 의존 객체 자동주입
+	@Repository("memService") 혹은 @Service 혹은 @Component    // 서비스 객체로 스프링 컨테이너로 담겨야 할것이라 명시
+	public class MemberService implements IMemberService {
+	>>>>>>>>>>>>>
+	@Resource(name="memService")
+	MemberService service;   // 선언 후 사용가능
+	
+	- Dao 객체 구현
+	1) 어노테이션을 이용해서 DAO 객체 생성 및 의존 객체 자동주입
+	@Repository
+	public class MemberDao implements IMemberDao {
+	>>>>>>>>>>>>>
+	@Autowired
+	MemberDao dao;
+	
+18강 Controller 객체 구현 - 1
+	- 요청 파라미터
+	ID : <input type="text" name="memId">
+	PW : <input type="password" name="memPw">
+	>>>>>>>>>>>>>>>
+		A. 방법 1
+	@RequestMapping(value="memLogin", method=RequestMethod.POST)
+	public String memLogin(Model model, HttpServletRequest request){
+		String memId = request.getParameter("memId");
+		String memPw = request.getParameter("memPw");
+	}
+	
+		B. 방법 2
+	@RequestMapping(value="memLogin", method=RequestMethod.POST)
+	public String memLogin(Model model
+				, @RequestParam("memId") String memId
+				, @RequestParam(value="memPw", required=true) String memPw
+				, @RequestParam(value="memPw2", required=false, defaultValue="1234") String memPw2) {
+	}
+	
+		C. 방법 3
+	@RequestMapping(value="memLogin", method=RequestMethod.POST)
+	public String memLogin(Member member) { // member 객체의 getter, setter로 사용자 입력값이 프로퍼티화
+		String memId = member.getMemId();
+		String memPw = member.getMemPw();
+		return "memJoinOk";
+	}
+	>>> return 시에 return 값을 명시해주지 않아도 getter setter가 작용되어
+	${member.memId} , ${member.memPw} 로 사용 가능하다.
+	Command 객채를 사용함으로써 코드가 많이 줄어들 수 있다.
+
+19강 Controller 객체 구현 - 2
+	- @ModelAttribute
+	@ModelAttribute를 이용하면 커멘드 객체의 이름을 변경할 수 있고, 변경된 이름은 뷰에서 커멘드 객체를 참조할때 사용된다.
+	ex) 컨트롤러
+	public String memJoin(Member member)  >>> 뷰 - ${member.memId}
+	public String memJoin(@ModelAttribute("mem") Member member)  >>> 뷰 - ${mem.memId}
+	
+	- @ModelAttribute("serverTime")                   // Method 위에 @ModelAttribute가 있을 때 컨트롤러의 어떤 method를 호출해도
+	public String getServerTime(Locale locale){    //  공통적으로 실행되어 뷰에서 ${serverTime}을 사용할 수 있다.
+		Date date = new Date();
+		DateFormat dateFormat = DateFormat.getDateTimeInstance();
+		
+		return dateFormat.format(date);
+	}
+	>>> 뷰 ${serverTime}
+	
+	- Model & ModelAndView
+	컨트롤러에서 뷰에 데이터를 전달하기 위해 사용되는 객체로 Model과 ModelAndView가 있다.
+	두 객체의 차이점은 Model은 뷰에 데이터만을 전달하기 위한 객체이고
+	ModelAndView는 데이터와 뷰의 이름을 함께 전달하는 객체이다.
+	
+	- @RequestMapping(value="/memModify", method=RequestMethod.Post)
+	public String memModify(Model model, Member member){
+		Member[] members = service.memberModify(member);
+		model.addAttribute("memBef", members[0]);
+		model.addAttribute("memAft", members[1]);
+		return "memModifyOk";
+	}
+	
+	- @RequestMapping(value="/memModify", method=RequestMethod.POST)
+	public ModelAndView(Member member){
+		Member[] members = service.memberModify(member);
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("memBef", members[0]);
+		mav.addObject("memAft", members[1]);
+		mav.setViewName("memModfiyOk");
+		return mav;
+	}
+	
+20강 세션, 쿠키
+	- 세션(Session)과 쿠키(Cookie)
+	Connectionless Protocol
+	웹서비스는 HTTP 프로토콜을 기반으로 하는데, HTTP 프로토콜은 클라이언트와 서버의 관계를 유지하지 않는 특징이 있다.
+	한번 응답을 하고 바로 연결을 끊는다.(클라이언트 수가 엄청나게 많으므로 연결 유지 시에는 서버에 부하가 생기기 떄문)
+	서버 부하를 줄일 수 있는 장점은 있으나, 클라이언트의 요청시마다 서버와 매번 새로운 연결이 생성되기 때문에 로그인 상태유지, 장바구니 등의 기능을 구현하기 어렵다.
+	이러한 Connectionless Protocol의 불편함을 해결하기 위해 세션과 쿠키를 이용한다.
+	세션과 쿠키는 클라이언트와 서버의 연결상태를 유지해주는 방법으로, 세션은 서버에서 연결정보를 관리하는 반면 쿠키는 클라이언트에서 연결 정보를 관리하는데 차이가 있다.
+	
+
+	
+
+	
+	- 세션생성
+	A.
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String memLogin(Member member, HttpServletRequest request){
+		Member mem = service.memberSearch(member);
+		HttpSession session = request.getSession(); // 서버가 가지고 있는 세션에 속성을 추가해줌(세션 생성)
+		session.setAttribute("member", mem);
+	
+		return "loginOk";
+	}
+	
+	B.
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String memLogin(Member member, HttpSession session){
+		Member mem = service.memberSearch(member);
+		session.setAttribute("member", mem);
+	
+		return "loginOk";
+	}
+	
+	- 세션 삭제(세션이 더 이상 필요 없을때, 로그아웃 또는 탈퇴 등)
+	@RequestMapping("/logout")
+	public String memLoginOut(Member member, HttpServletRequest request){
+		HttpSession session = request.getSession(); // 서버가 가지고 있는 세션에 속성을 추가해줌(세션 생성)
+		session.invalidate();
+	
+		return "loginOutOk";
+	}
+	
+	@RequestMapping("/logout")
+	public String memLoginOut(Member member, HttpSession session){
+		session.invalidate();
+	
+		return "loginOutOk";
+	}
+	
+	- 쿠키(Cookie)
+	파라미터로 받은 HttpServletResponse에 쿠키를 담는다.
+	쿠키를 생성할 때는 생성자에 두 개의 파라미터를 넣어주는데 첫번째는 쿠키이름을 넣어주고 두번째는 쿠키값을 넣어준다.
+	
+	- 쿠키생성
+	@RequestMapping("/main")
+	public String mallMain(Mall mall, HttpServletResponse response){
+		Cookie genderCookie = new Cookie("gender", mall.getGender();
+		if(mall.isCookieDel()){
+			genderCookie.setMaxAge(0);
+			mall.setGender(null);
+		} else {
+			genderCookie.setMaxAge(60*60*24*30);
+		}
+		response.addCookie(genderCookie);
+		return "/mall/main";
+	}
+
+	- 쿠키사용
+	@RequestMapping("/index")
+	pub;ic String mallIndex(Mall mall, @CookieValue(value="gender", required=false) Cookie genderCookie
+				, HttpServletRequest request){
+		if(genderCookie != null)
+			mall.setGender(genderCookie.getValue());
+			
+		return "/mall/index";
+	}
+
+21강 리다이렉트, 인터셉트
+	- 리다이렉트 : 지금의 페이지에서 특정 페이지로 전환하는 기능
+	- 인터셉터(interceptor) : 리다이렉트를 사용해야 하는 경우가 많은 경우 HandlerInterceptor를 이용하여 통합 관리할 수 있다.
+	
+	- preHandle() 은 Handler(Controller) 이전에 실행됨
+	- <interceptors>
+		<interceptor>
+			<mapping path="/member/modifyForm"/>  <!--해당 형태로 들어왔을때 Interceptor를 거치도록하여라 -->
+			<mapping path="/member/removeForm"/>
+			
+			<mapping path="/member/**"/>
+			<exclude-mapping path="/member/joinForm" /> <!-- /member/** 형태는 모두 수용하나 joinForm은 제외 --> 
+			<beans:bean class="com.bs.lec21.member.MemberLoginInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
+22강 Database 설치
+
+23강 JDBC
+	
+	- @Repository
+	public class MemberDao implements IMemberDao {
+		private String driver = "oracle.jdbc.driver.OracleDriver";    
+		private String url = "jdbc:oracle:thin:@localhost:1521:xe";
+		private String userId = "scott";
+		private String userPw = "tiger";
+		
+		private Connection conn = null;
+		private PreparedStatement pstmt = null;
+		private ResultSet rs = null;
+		
+		@Override
+		public int memberInsert(Member member){
+			int result = 0;
+			try {
+				Class.forName(driver);            // Driver 메모리에 로딩
+				conn = DriverManager.getConnection(url, userId, userPw);  // 드라이버매니저로부터 연결 객체를 가져옴
+				String sql = "INSERT INTO member (memId, memPw, memMail) values (?, ?, ?)";
+				pstmt.setString(1, member.getMemId());
+				pstmt.setString(2, member,getMemPw());
+				pstmt.setString(3, member.getMemMail());
+				result = pstmt.executeUpdate();   // PreparedStatement 를 이용하여 쿼리를 주입
+				
+			} catch (Exception e){
+				e.printStackTrace();
+			} finally {
+				try {
+					if(pstmt != null) pstmt.close();  // 자원해제
+					if(conn != null) conn.close();
+				} catch (Exception e){
+					e.printStackTrace();
+				} 
+			}    // 데이터와 네트워크 상으로 연결을 한것이기 때문에 반드시 예외처리를 해주어야 한다.
+		}
+	}
+	
+24강 JDBC Template
+	- JdbcTemplate
+	드라이버 로드이 ,DB연결, 자원해제를 Spring이 처리해주어 개발자는 SQL 작성에 집중할 수 있게한다.
+	
+	
+	- 데이터베이스 연결과 관련된 정보를 가지고 있는 DataSource는 스프링  또는 c3p0에서 제공하는 클래스를 사용할 수 있다.
+	- pom.xml에 repositoriy 및 dependency 추가
+	<repositories>        <!-- ORACLE Repository는 Maven과 다르므로 Repository를 별도로 추가해야한다 -->
+		<repository>
+			<id>oracle</id>
+			<name>ORACLE JDBC Repository</name>
+			<url>http://maven.jahia.org/maven2</url>
+		</repository>
+	</repositories>
+	<dependency>         <!-- 추가한 ORACLE Repository로부터 dependency 호출 -->
+		<groupId>com.oracle</groupId>
+		<artifactId>ojdbc6</artifactId>
+		<version>12.1.0.2</version>
+	</dependency>
+	<dependency>
+		<groupId>prg.springframework</groupId>
+		<artifactId>spring-jdbc</artifactId>
+		<version>4.1.6.RELEASE</version>
+	</dependency>
+	<dependency>
+		<groupId>com.mchange</groupId>
+		<artifactId>c3p0</artifactId>
+		<version>0.9.5</version>
+	</dependency>
+	
+25강 커넥션풀
+	- 지속적으로 드라이버 생성하고 DB연결하고 자원을 해제하는 과정이 메모리에 부하를 일으킬 수 있다.
+	- 미리 커넥션을 만들어놓고 사용하는 방법을 커넥션 풀이라고 한다.
+	- com.mchange.v2.c3p0.ComboPooledDataSource
+	- dataSource = new DriverManagerDataSource();
+	dataSource.setDriverClass(driver);
+	dataSource.setJdbcUrl(url);
+	dataSource.setUser(userId);
+	dataSource.setPassword(userpw);
+	- 스프링 설정파일을 이용한 DataSource 설정
+	<beans:bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<beans:property name="driverClass" value="oracle.jdbc.driver.OracleDriver" />
+		<beans:property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<beans:property name="user" value="scott" />
+		<beans:property name="password" value="tiger" />
+		<beans:property name="maxPoolSize" value="200" />
+		<beans:property name="checkoutTimeout" value="60000" />
+		<beans:property name="maxIdleTime" value="1800" />
+		<beans:property name="idleConnectionTestPeriod" value="600" />
+	</beans:bean>
+	-----------------------------------------------------------------------------------
+	@Autowired
+	public MemberDao(ComboPooledDataSource dataSource){   // 스프링객체가 dataSource 변수로 자동주입된다.
+		this.template = new JdbcTemplate(dataSource);
+	}
+	
+	- JAVA파일에서 Annotation을 이용해 Configuration 생성
+	@Configuration
+	public class DBConfig {
+		
+		@Bean
+		public ComboPooledDataSource dataSource() throws PropertyVetoException {
+			dataSource.setDriverClass("oracle.jdbc.driver.OracleDriver");
+			dataSource.setJdbcUrl("jdbc:oracle:thin:@localhost:1521:xe");
+			dataSource.setUser("scott");
+			dataSource.setPassword("tiger");
+			dataSource.setMaxPoolSize(200);
+			dataSource.setCheckoutTimeout(60000);
+			dataSource.setMaxIdelTime(1800);
+			dataSource.setIdleConnectionTestPeriod(600);
+		
+			return dataSource;
+		}
+	}
