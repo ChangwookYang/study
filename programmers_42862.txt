@@ -1,0 +1,52 @@
+public class programmers_42862 {
+
+    public int solution(int n, int[] lost, int[] reserve) {
+        int answer = 0;
+        int [][] students = new int[n+1][1];
+
+         없으면 1, 있으면 2, 둘다 혹은 빌려줌 0 초기화
+        final int PASS = 0;
+        final int NO = 1;
+        final int YES = 2;
+
+        for(int i  lost){
+            students[i][0] = NO;
+        }
+        for(int i  reserve){
+            if(students[i][0]==NO) students[i][0] = PASS;
+            else students[i][0] = YES;
+        }
+
+        for(int i=1;i=n;i++){
+            if(students[i][0]==PASS) {
+                answer++;
+            } else {
+                boolean isLost  = students[i][0]==NOtruefalse;
+                if(i==1 && isLost){
+                    if(students[2][0] == YES) {
+                        students[2][0]=PASS;
+                        answer++;
+                    }
+                } else if(i==n && isLost){
+                    if(students[n-1][0] == YES) {
+                        students[n-1][0]=PASS;
+                        answer++;
+                    }
+                } else if(isLost){
+                    if(students[i-1][0] == YES) {
+                        students[i-1][0]=PASS;
+                        answer++;
+                    } else if(students[i+1][0] == YES){
+                        students[i+1][0]=PASS;
+                        answer++;
+                    }
+                } else {
+                    answer++;
+                }
+            }
+        }
+
+
+        return answer;
+    }
+}
