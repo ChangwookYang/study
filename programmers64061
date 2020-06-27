@@ -1,0 +1,44 @@
+ public int solution(int[][] board, int[] moves) {
+        int answer = 0;
+
+        /* 결과는 이동수이하일 것이다. */
+        int[] result = new int[moves.length];
+
+        for(int i =  0; i < moves.length; i++){
+            int boardIdx = moves[i]-1;
+
+
+            int boardIdxLastValue = 0;
+            for(int j = 0 ; j < board[boardIdx].length; j++){
+                int val = board[j][boardIdx];
+                if(val != 0){
+                    boardIdxLastValue = val;
+                    board[j][boardIdx] = 0;
+                    break;
+                } 
+            }
+
+            
+            if(i==0){
+                result[0] = boardIdxLastValue;
+            } else {
+                int resultLastValue = 0;
+                for(int j = result.length-1 ; j >= 0; j--){
+                    int val = result[j];
+                    if(val != 0){
+                        resultLastValue = val;
+                        if(boardIdxLastValue == resultLastValue){
+                            answer++;
+                            result[j] = 0;
+                        } else if(j < result.length-1){
+                            result[j+1] = boardIdxLastValue;
+                        }
+
+                        break;
+                    }
+                }
+            }   
+        }
+
+        return answer;
+    }
