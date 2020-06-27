@@ -1,0 +1,40 @@
+public int[] solution(int[] answers) {
+        int[] answer= {};
+
+       
+        int[] num1 = {1, 2, 3, 4, 5}; // 5
+        int[] num2 = {2, 1, 2, 3, 2, 4, 2, 5};  // 8
+        int[] num3 = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5}; // 10
+
+        int[] res = new int[3];
+        for(int i=0; i< answers.length; i++){
+            int num1Idx = i%5;
+            int num2Idx = i%8;
+            int num3Idx = i%10;
+            
+            if(answers[i] == num1[num1Idx]) res[0]++;
+            if(answers[i] == num2[num2Idx]) res[1]++;
+            if(answers[i] == num3[num3Idx]) res[2]++;
+        }
+
+        int max = 0;
+        for(int i=0 ;i < 3; i++){
+            if(max<res[i]) max = res[i];
+        }
+
+        int cnt = 0;
+        for(int i=0 ;i < 3; i++){
+            if(max == res[i]) cnt++;
+        }
+
+        answer = new int[cnt];
+        int arrIdx = 0;
+        for(int i=0 ;i < 3; i++){
+            if(max == res[i]) {
+                answer[arrIdx] = (i+1);
+                arrIdx++;
+            }
+        }   
+
+        return answer;
+    }
