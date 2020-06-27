@@ -1,0 +1,30 @@
+import java.util.*;
+
+class Solution {
+    public String solution(String[] participant, String[] completion) {
+        String answer = "";
+        
+        HashMap<String, Integer> hashPart = new HashMap<String, Integer>();
+        for(String name : participant){
+                if(hashPart.containsKey(name)){
+                    int val = hashPart.get(name);
+                    hashPart.put(name, val+1);
+                } else {
+                    hashPart.put(name, 1);
+                }
+        }
+        
+        for(String name : completion){
+            if(hashPart.containsKey(name)){
+                int val = hashPart.get(name);
+                hashPart.put(name, val-1);
+            }
+        }
+        
+        for(String name : participant){
+            int val = hashPart.get(name);
+            if(val==1) return name;
+        }
+        return answer;
+    }
+}
