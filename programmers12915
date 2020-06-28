@@ -1,0 +1,16 @@
+public String[] solution(String[] strings, int n) {
+        String[] answer = {};
+          
+        Arrays.sort(strings, new Comparator<String>() {
+
+            @Override
+            public int compare(String o1, String o2) {
+                /* 리턴값이 -1이면 내림차순, 0이면 같음, 1이면 오름차순 */
+
+                return 0;
+            }
+        
+        });
+
+        return answer;
+    }
