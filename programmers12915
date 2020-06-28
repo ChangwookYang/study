@@ -6,11 +6,18 @@ public String[] solution(String[] strings, int n) {
             @Override
             public int compare(String o1, String o2) {
                 /* 리턴값이 -1이면 내림차순, 0이면 같음, 1이면 오름차순 */
+                if(o1.charAt(n) < o2.charAt(n)){
+                    return 1;
+                } else if(o1.charAt(n) > o2.charAt(n)){
+                    return -1;
+                } else if(o1.charAt(n) == o2.charAt(n)){
+                    return o1.compareTo(o2);
+                }
 
                 return 0;
             }
         
         });
-
+        answer = strings;
         return answer;
     }
