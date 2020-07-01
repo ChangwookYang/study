@@ -1,0 +1,22 @@
+class Solution {
+    public String[] solution(int n, int[] arr1, int[] arr2) {
+        String[] answer = new String[n];
+        for(int i=0 ; i<n ; i++){
+            int num1 = arr1[i]; // 9
+            int num2 = arr2[i]; // 30
+            String str ="";
+            for(int j=0; j<n; j++){
+                int val1 = num1 % 2;
+                int val2 = num2 % 2;
+                if(val1+val2 ==0) str = " " + str;
+                else str = "#" + str;
+
+                num1 = num1/2;
+                num2 = num2/2;
+            }
+            answer[i] = str;
+        }
+        
+        return answer;
+    }
+}
