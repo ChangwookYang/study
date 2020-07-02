@@ -1,0 +1,75 @@
+import java.util.*;
+
+class Solution {
+    class TruckInfo {
+                private int weight;
+                private int timeToPass;
+                void setWeight(int weight){
+                    this.weight = weight;
+                }
+
+                int getWeightPeek(){
+                    return this.weight;
+                }
+
+                int getWeight(){
+                    setTimeMinus();
+                    return this.weight;
+                }
+
+                void setTimeToPass(int timeToPass){
+                    this.timeToPass = timeToPass;
+                }
+
+                int getTimeToPass(){
+                    setTimeMinus();
+                    return this.timeToPass;
+                }
+                void setTimeMinus(){
+                    this.timeToPass -= 1;
+                }
+                boolean isTimeRemained(){
+                    return (this.timeToPass > 0)?true:false;
+                }
+            }
+
+            public int solution(int bridge_length, int weight, int[] truck_weights){
+                int answer = 0;
+                Queue<TruckInfo> queue = new LinkedList<TruckInfo>();
+                for(int val : truck_weights){
+                    TruckInfo info = new TruckInfo();
+                    info.setWeight(val);
+                    info.setTimeToPass(bridge_length);
+                    queue.add(info);
+                }
+
+                ArrayList<TruckInfo> list = new ArrayList<TruckInfo>();
+                while(!queue.isEmpty()){
+                    answer++;
+                    if(list.isEmpty()){
+                        TruckInfo info = queue.poll();
+                        info.setTimeMinus();
+                        list.add(info);                                     
+                    } else {
+                        int curWeight = 0;
+                        for(TruckInfo info : list){
+                            if(info.isTimeRemained()){
+                                curWeight += info.getWeight();
+                            }
+                        }
+
+                        if(queue.peek().getWeightPeek() + curWeight <= weight){
+                            queue.peek().getWeight();
+                            list.add(queue.poll());
+                        }
+                    }       
+
+                    if(queue.isEmpty()){
+                        answer += bridge_length;
+                    }
+                }
+                return answer;
+
+            }
+
+}
