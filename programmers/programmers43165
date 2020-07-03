@@ -1,0 +1,23 @@
+class Solution {
+    
+    int target;
+    int answer;
+    public int solution(int[] numbers, int target) {
+        this.target = target;
+        this.answer = 0;
+        dfs(numbers, 0, 0);
+        
+        return answer;
+    }
+    
+    void dfs(int[] arr, int index, int sum){
+        if(index == arr.length-1){
+            if(sum + arr[index] == target) answer++;
+            if(sum - arr[index] == target) answer++;
+        } else {
+            dfs(arr, index+1, sum+arr[index]);
+            dfs(arr, index+1, sum-arr[index]);
+        }
+    }
+    
+}
