@@ -1,6 +1,6 @@
-### Study Repositories
-* Knowledge
+### Study Repository
+* Knowledge  
   IT 개념정리
   
-* Programmers
+* Programmers  
   프로그래머스 알고리즘 문제풀이
