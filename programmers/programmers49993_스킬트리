@@ -1,4 +1,4 @@
-```java
+```Java
 public int solution(String skill_tree, String[] skills){
         int answer = 0;
         for(String str : skills){
