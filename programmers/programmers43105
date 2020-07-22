@@ -1,0 +1,23 @@
+ public static void main(final String[] args) throws Exception {
+        
+        int [][] triangle = {{7}, {3, 8}, {8, 1, 0}, {2, 7, 4, 4}, {4, 5, 2, 6, 5}};
+        
+        solution(triangle);
+    }
+
+    static public int solution(int[][] triangle) {
+        int answer = 0;
+        int length = triangle.length;
+        int[][] max = new int[length+1][length+1];
+        max[1][1] = triangle[0][0];
+        for(int i=2; i < length; i++){
+            
+            for(int j=1; j <= i; j++){
+                max[i][j] = Math.max( );
+                
+            }
+
+        }
+
+        return answer;
+    }
