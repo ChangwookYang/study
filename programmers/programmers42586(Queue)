@@ -1,0 +1,54 @@
+import java.util.*;
+
+class Solution {
+     class Node {
+        int progress;
+        int speed;
+        public Node(int progress, int speed){
+            this.progress = progress;
+            this.speed = speed;
+        }
+    }
+    
+    public int[] solution(int[] progresses, int[] speeds) {
+        int[] answer = new int[progresses.length];
+
+        Queue<Node> queue = new LinkedList<Node>();
+
+        for(int i=0; i< progresses.length; i++){
+            queue.offer(new Node(progresses[i], speeds[i]));
+        }
+
+        int arrIdx = 0;
+        while(!queue.isEmpty()){
+            int cnt = 0;
+            Node firstNode = queue.peek();
+            if(firstNode.progress < 100){
+                Iterator<Node> iter = queue.iterator();
+                while(iter.hasNext()){
+                    Node nextNode = iter.next();
+                    nextNode.progress += nextNode.speed;
+                }
+            } else {
+                while(queue.peek().progress >= 100){
+                    cnt++;
+                    queue.poll();
+                    if(queue.isEmpty()) break;
+                }
+                answer[arrIdx] = cnt;
+                arrIdx++;
+            }
+        }
+
+        int arrSize = 0;
+        for(int i=0; i<answer.length; i++){
+            if(answer[i]>0) arrSize++;
+        }
+
+        int[] realAnswer = new int[arrSize];
+        for(int i=0; i<arrSize; i++){
+            realAnswer[i] = answer[i];
+        }
+        return realAnswer;
+    }
+}

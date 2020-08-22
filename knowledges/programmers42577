@@ -1,0 +1,18 @@
+public boolean solution(String[] phone_book) {
+    boolean answer = true;
+    for(int i=0; i< phone_book.length ;i++){
+        String val = phone_book[i];
+        for(int j=0; j<phone_book.length;j++){
+            if(i==j || val.length() > phone_book[j].length()) continue;
+
+            String val2 = phone_book[j].substring(0, val.length());
+            if(val.equals(val2)){
+                answer = false;
+                return answer;
+            } 
+
+        }
+    }
+
+    return answer;
+}

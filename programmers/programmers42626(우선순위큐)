@@ -1,0 +1,27 @@
+public int solution(int[] scoville, int K) {
+        int answer = 0;
+        
+        PriorityQueue<Integer>  queue = new PriorityQueue<>();
+        for(int val : scoville){
+            queue.offer(val);
+        }
+
+        while(!queue.isEmpty()){
+            int num1 = queue.poll();
+            if(num1 >= K) break;
+            else {
+                if(queue.isEmpty()){
+                    answer = -1;
+                    break;
+                } else {        
+                    answer++;        
+                    int num2 = queue.poll();  
+                    int newVal = num1 + 2*num2;
+                    queue.offer(newVal);
+                }
+            }
+        }
+
+
+        return answer;
+     }

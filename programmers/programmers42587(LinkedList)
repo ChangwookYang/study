@@ -1,0 +1,45 @@
+public class Node {
+        int priority;
+        int location;
+        public Node(int priority, int location){
+            this.priority = priority;
+            this.location = location;
+        }
+    }
+    public int solution(int[] priorities, int location) {
+        int answer = 0;
+        LinkedList<Node> list = new LinkedList<Node>();
+        
+        /* 리스트 초기화 */
+        for(int i=0; i < priorities.length ; i++){
+            list.add(new Node(priorities[i], i));
+        }
+
+        while(true){
+            Node node = list.getFirst();
+            int priority = node.priority;
+            boolean isExistPrior = false;
+            for(Node n : list){
+                if(n.priority > priority){
+                    /* 우선순위가 높은게 있다면 맨 마지막으로 */
+                    list.addLast(node);
+                    list.removeFirst();
+                    isExistPrior = true;
+                    break;
+                }
+            }
+
+            if(!isExistPrior) {
+                answer++;
+                if(node.location == location){
+                    break;
+                } else {
+                    list.removeFirst();
+                }
+            }
+
+        }
+
+
+        return answer;
+    }

@@ -1,0 +1,126 @@
+Spring 프래임워크란?
+
+IoC와 AOP를 지원하는 경량의 컨테이너 프레임워크
+
+
+- 경량(두 가지 이유)
+
+           1. 모듈들이 jar파일로 묶여있다.
+
+           2. POJO(Plain Old Java Object) 지원하여 형식 제약이 없다
+
+              ex) Servlet 같은 경우는 doGet, doPost 등의 제약이 있는 것이 차이점
+
+             
+
+- 컨테이너
+
+           객체의 인스턴스 생성, 생명주기를 관리
+
+           프로그래머가 작성한 코드를 스스로 참조한 뒤 알아서 객체의 생성과 소멸을 컨트롤해준다.
+
+          
+
+- IoC(Inversion of Conversion, 제어의 역행)
+
+           Dependency Injection을 제공!
+
+           ex) 다음 코드를 스프링으로 설정할 수 있다.
+
+           class TV {
+
+                     private LgSpeaker speaker;
+
+                     public TV {
+
+                                speaker = new LgSpeaker();
+
+                     }
+
+                     public volumeUp(){
+
+                                speaker.makeLgSpeakerUp();
+
+                     }
+
+           }
+
+           ->        삼성스피커로 바꿈(관리가 어려움)
+
+           class TV {
+
+                     private SamSpeaker speaker;
+
+                     public TV {
+
+                                speaker = new SamSpeaker();
+
+                     }
+
+                     public volumeUp(){
+
+                                speaker.makeSamVolumeUp();
+
+                     }
+
+           }
+
+           -> 스프링으로 설정가능(소스 바꿀필요 없이 설정값만 바꾸면됨)
+
+           <bean id="samsungSpeaker" class="class.SamSpeaker" />
+
+           <bean class="class.TV">
+
+                     <property name="speaker" ref="samsungSpeaker" />
+
+           </bean>
+
+          
+
+           -> 참고
+
+           <bean id="dbMessageProvider" class="com.lrp.cbo.cm.message.DBMessageProvider" />
+
+           <bean class="com.lrp.core.message.MessageSource">
+
+                     <property name="messageProvider" ref="dbMessageProvider" />
+
+           </bean>
+
+           1. com.lrp.cbo.cm.message.DBMessageProvider 객체를 생성
+
+           2. com.lrp.core.message.MessageSource 객체를 생성할 때 id:dbMessageProvider(DBMessageProvider 객체)참조
+
+           3.  /lrpcore/src/main/java/com/lrp/core/message/MessageSource.java
+
+                     private static MessageProvider messageProvider; 객체에 1.에서 생성한 DBMessageProvider 객체를 주입(=의존성 주입)
+
+ 
+
+- AOP (Asepect-Oriented Programming)
+
+           1. 핵심관심과 횡돤관심 분리 (핵심관심 : 비지니스로직, 횡단관심 : 로그 등 공통 로직)
+
+           2. execution 패턴에 정해진 표현이 수행될때 debugLogAspect 객체의 logAround 를 실행한다.
+
+           <bean id="debugLogAspect" class="com.lrp.core.log.DebugLogAspect">
+
+                     <property name="jsonMapper" ref="jsonObjectMapper" />
+
+           </bean>
+
+           <beans profile="pc">
+
+                     <aop:config >
+
+                         <aop:aspect id="aspectLoggging" ref="debugLogAspect">
+
+                             <aop:pointcut id="svcPointcut" expression="execution(public * com.lrp..*.svc.*.*(..))" />
+
+                             <aop:around method="logAround" pointcut-ref="svcPointcut"  />
+
+                         </aop:aspect>
+
+                     </aop:config>
+
+           </beans>
