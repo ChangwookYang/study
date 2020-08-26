@@ -1,0 +1,19 @@
+static String solution(String s, int n) {
+        String answer = "";
+        
+        char a = 97; // 26 97~122
+        char A = 65; // 26 65~90
+
+        for(int i=0 ;i < s.length(); i++){
+            if(" ".equals(String.valueOf(s.charAt(i)))){
+                answer += " ";
+            } else {
+                int newIdx = s.charAt(i) + n;
+                if(newIdx > 122) newIdx = newIdx - a;
+                else if(newIdx > 90 && newIdx < 97) newIdx = newIdx - A;
+                answer += (char) (s.charAt(i) + n);
+            }
+        }
+
+        return answer;
+    }
