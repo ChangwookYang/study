@@ -1,0 +1,71 @@
+int[] first = {1, 2, 3, 4, 5};
+
+                    int[] second ={2, 1, 2, 3, 2, 4, 2, 5};
+
+                    int[] third = {3, 3, 1, 1, 2, 2, 4, 4, 5, 5};
+
+                   
+
+                    int index = 0;
+
+                    int numFirst = 0;
+
+                    int numSecond = 0;
+
+                    int numThird = 0;
+
+                    for(int val : answers){
+
+                           if(val == first[index % first.length])
+
+                                 numFirst++;
+
+                           if(val == second[index % second.length])
+
+                                 numSecond++;
+
+                           if(val == third[index % third.length])
+
+                                 numThird++;
+
+                          
+
+                           index++;
+
+                    }
+
+                   
+
+                    int max = Math.max(Math.max(numFirst, numSecond), numThird);
+
+                   
+
+                    List<Integer> list = new ArrayList<Integer>();
+
+                    if(max == numFirst){
+
+                           list.add(1);
+
+                    }
+
+                    if(max == numSecond){
+
+                           list.add(2);
+
+                    }
+
+                    if(max == numThird){
+
+                           list.add(3);
+
+                    }
+
+                    int[] answer = new int[list.size()];
+
+                    for(int i=0; i < list.size();i++){
+
+                           answer[i] = list.get(i);
+
+                    }
+
+                    return answer;
