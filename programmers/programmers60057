@@ -1,0 +1,47 @@
+class Solution {
+    public int solution(String s) {
+        int answer = 1000;
+
+        if(s.length() == 1) return 1;
+        /* 개수 */
+        for(int i=1; i <= s.length()/2; i++){
+            
+            /* 초기값 */
+            String befCurString = s.substring(0, i);
+
+            int cursor = i;
+            StringBuilder str = new StringBuilder();
+            String curString = new String();
+            /* 숫자앞 상수 */
+            int count = 1;
+            while(cursor <= s.length()){
+                if(cursor + i > s.length()){
+                    if(befCurString.equals(curString)){
+                        str.append((count > 1)?String.valueOf(count):"");
+                        str.append(befCurString);
+                        befCurString = curString;
+                    }
+
+                    str.append(s.substring(cursor, s.length()));
+                    break;
+                }
+                curString = s.substring(cursor, cursor+i);
+    
+                if(befCurString.equals(curString)){
+                    count++;
+                } else if(cursor >= 1) {
+                    str.append((count > 1)?String.valueOf(count):"");
+                    str.append(befCurString);
+                    befCurString = curString;
+                    count = 1;
+                }  
+                cursor = cursor+i; 
+
+            }
+
+            if(answer > str.toString().length() && str.toString().length() >0) 
+                answer = str.toString().length();
+        }
+        return answer;
+    }
+}
