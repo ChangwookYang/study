@@ -1,0 +1,22 @@
+class Solution {
+    public int[] solution(int brown, int yellow) {
+        int[] answer = {};
+        int total = brown + yellow;
+
+        for(int i=3; i<= brown/2; i++){
+            if(total % i == 0){ // 나눠 떨어진다.
+
+                int j = total / i;
+                if((i-2)*(j-2) == yellow){
+                    if(i < j){
+                        int temp = i;
+                        i = j;
+                        j = temp;
+                    }
+                    return new int[]{i, j};
+                }
+            }
+        }
+        return answer;
+    }
+}

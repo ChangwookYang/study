@@ -1,0 +1,21 @@
+int answer = 0;
+
+        Arrays.sort(citations);
+
+        int hIndex = 0;
+
+        for(int i = citations.length-1; i >= 0; i--){
+            int cnt = hIndex;
+            for(int j = i; j >= 0; j--){
+                if(citations[j] >= i+1) cnt++;
+                else break;
+            }
+
+            if(i + 1 == cnt){
+                answer = i+1;
+                break;
+            } else {
+                hIndex++;
+            }
+        }
+        return answer;

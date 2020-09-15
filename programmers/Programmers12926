@@ -1,0 +1,18 @@
+static String solution(String s, int n) {
+        String answer = "";
+        
+        for(int i=0 ;i < s.length(); i++){
+            if(" ".equals(String.valueOf(s.charAt(i)))){
+                answer += " ";
+            } else {
+                int newIdx = s.charAt(i) + n;
+                if(newIdx > 'z' && s.charAt(i) >= 'a' && s.charAt(i) <= 'z')
+                    newIdx = 'a' + (newIdx - 'z' -1);
+                else if(newIdx > 'Z' && s.charAt(i) >= 'A' && s.charAt(i) <= 'Z')
+                    newIdx = 'A' + (newIdx - 'Z' -1);
+                answer += (char) (newIdx);
+            }
+        }
+
+        return answer;
+    }

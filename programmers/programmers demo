@@ -1,0 +1,35 @@
+import java.util.*;
+class Solution {
+    public int[] solution(int[][] v) {
+        int[] answer = new int[2];
+
+        HashMap<Integer, Integer> xMap = new HashMap<>();
+        HashMap<Integer, Integer> yMap = new HashMap<>();
+        for(int[] arr : v){
+            if(xMap.containsKey(arr[0])){
+                xMap.put(arr[0], xMap.get(arr[0]) + 1);
+            } else {
+                xMap.put(arr[0], 1);
+            }
+
+            
+            if(yMap.containsKey(arr[1])){
+                yMap.put(arr[1], yMap.get(arr[1]) + 1);
+            } else {
+                yMap.put(arr[1], 1);
+            }
+        }
+
+        for(Integer val : xMap.keySet()){
+            int x = xMap.get(val);
+            if(x==1) answer[0] = val;
+        }
+
+        for(Integer val : yMap.keySet()){
+            int y = yMap.get(val);
+            if(y==1) answer[1] = val;
+        }
+
+        return answer;
+    }
+}
