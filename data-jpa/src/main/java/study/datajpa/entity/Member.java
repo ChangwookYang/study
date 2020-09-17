@@ -7,8 +7,9 @@ import javax.persistence.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @ToString(of = {"id", "username", "age"})
-public class Member {
+public class Member extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name="member_id")
@@ -24,6 +25,10 @@ public class Member {
         this.username = username;
     }
 
+    public Member(String username, int age) {
+        this.username = username;
+        this.age = age;
+    }
     public Member(String username, int age, Team team) {
         this.username = username;
         this.age = age;
