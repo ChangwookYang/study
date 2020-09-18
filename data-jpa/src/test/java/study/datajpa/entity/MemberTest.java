@@ -71,8 +71,8 @@ class MemberTest {
         // when
         Member findMember = memberRepository.findById(member.getId()).get();
 
-        // then
-        System.out.println("findMember.createdDate = " + findMember.getCreatedDate());
-        System.out.println("findMember.updateDate = " + findMember.getUpdatedDate());
+//        // then
+//        System.out.println("findMember.createdDate = " + findMember.getCreatedDate());
+//        System.out.println("findMember.updateDate = " + findMember.getUpdatedDate());
     }
 }
