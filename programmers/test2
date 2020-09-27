@@ -1,0 +1,23 @@
+public static String solution(int n, String text, int second){
+        
+        // text = text.replace(" ", "_");
+        int length = text.length();
+        int totalSecond = (second <= 2*length)? second:second % (length*2);
+        // 1000 % 12 
+
+        StringBuilder sbAnswer = new StringBuilder();
+
+        for(int i=0; i<n; i++){
+            sbAnswer.append("_");
+        }
+
+        // totalSecond 실질적인 초만큼 이동
+        for(int i=0; i < totalSecond ; i++){
+            // 첫번째 삭제
+            sbAnswer.deleteCharAt(0);
+            // i의 길이가 작으면 붙인다.
+            sbAnswer.append((i < length)? text.substring(i, i+1): "_");
+        }
+
+        return sbAnswer.toString().replace(" ", "_");
+    }
