@@ -1,0 +1,35 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        lengthOfLongestSubstring("bbbbb");
+    }
+
+    public static int lengthOfLongestSubstring(String s) {
+        int answer = 0;
+        HashSet<Character> set = new HashSet<>();
+
+        int tempAnswer = 0;
+        if(s.length() > 0) answer = 1;
+        for(int i=0; i < s.length(); i++){
+            set.clear();
+
+            char c = s.charAt(i);
+            set.add(c);
+            tempAnswer = 1;
+            for(int j=i+1; j < s.length(); j++){
+                char cj = s.charAt(j);
+                if(set.contains(cj)){
+                    set.clear();
+                    break;
+                } else {
+                    tempAnswer++;
+                    answer = (tempAnswer > answer)? tempAnswer:answer;
+                }
+                set.add(cj);
+            }
+        }
+
+        return answer;
+    }
+}
