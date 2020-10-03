@@ -1,0 +1,21 @@
+public static int reverse(int x) {
+    long answer = 0;
+
+    ArrayList<Integer> arrList = new ArrayList<>();
+    boolean isMinus = (x < 0)?true:false;
+    if(isMinus) x *= -1;
+
+    while(x > 0){
+        arrList.add(x%10);
+        x /= 10;
+    }
+
+    for(int i=0; i < arrList.size(); i++){
+        answer += arrList.get(i) * Math.pow(10, arrList.size()-1-i);
+        if(answer > Integer.MAX_VALUE) {
+            return 0;
+        }
+    }
+
+    return (isMinus)?(int)answer*-1:(int)answer;
+}
