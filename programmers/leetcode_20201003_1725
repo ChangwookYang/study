@@ -1,0 +1,81 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+
+        findMedianSortedArrays(new int[]{1,2}, new int[]{3,4});
+    }
+
+
+    public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        double answer = 0;
+
+        int length = nums1.length + nums2.length;
+        int[] mergedArr = new int[length];
+
+        int num1Idx = 0;
+        int num2Idx = 0;
+        
+        int idx = 0;
+        while(num1Idx < nums1.length && num2Idx < nums2.length) {
+
+            if(nums1[num1Idx] < nums2[num2Idx]){
+                mergedArr[idx] = nums1[num1Idx];
+                num1Idx++;
+            } else {
+                mergedArr[idx] = nums2[num2Idx];
+                num2Idx++;
+            }
+            idx++;
+        }
+
+        while(num1Idx < nums1.length){
+            mergedArr[idx] = nums1[num1Idx];
+            num1Idx++;
+            idx++;
+        }
+
+        while(num2Idx < nums2.length){
+            mergedArr[idx] = nums2[num2Idx];
+            num2Idx++;
+            idx++;
+        }
+
+        if(length % 2 ==0){
+            answer = mergedArr[length/2] + mergedArr[length/2+1];
+        } else {
+            answer = mergedArr[length/2];
+        }
+
+        return answer;        
+    }
+
+    public static int lengthOfLongestSubstring(String s) {
+        // lengthOfLongestSubstring("bbbbb");
+        int answer = 0;
+        HashSet<Character> set = new HashSet<>();
+
+        int tempAnswer = 0;
+        if(s.length() > 0) answer = 1;
+        for(int i=0; i < s.length(); i++){
+            set.clear();
+
+            char c = s.charAt(i);
+            set.add(c);
+            tempAnswer = 1;
+            for(int j=i+1; j < s.length(); j++){
+                char cj = s.charAt(j);
+                if(set.contains(cj)){
+                    set.clear();
+                    break;
+                } else {
+                    tempAnswer++;
+                    answer = (tempAnswer > answer)? tempAnswer:answer;
+                }
+                set.add(cj);
+            }
+        }
+
+        return answer;
+    }
+}
