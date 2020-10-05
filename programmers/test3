@@ -1,0 +1,26 @@
+public static int solution(int N) {
+    StringBuilder str = new StringBuilder();
+    // 길이는 6까지 가능 9*6
+    for(int length = 1; length <= 6; length++){
+
+        int temp = N;
+        if(length * 9 < temp) continue;
+
+        int[] arr = new int[length];
+        for(int i = length-1; i >= 0; i--){
+            if(temp > 9){
+                arr[i] = 9;
+                temp -= 9;
+            } else {
+                arr[i] = temp;
+            }
+        }
+
+        for(int val : arr) {
+            str.append(String.valueOf(val));
+        }
+        break;
+    }
+
+    return Integer.parseInt(str.toString());
+}
