@@ -1,0 +1,32 @@
+class Node {
+    char c;
+    int index;
+    public Node(char c, int index){
+        this.c = c;
+        this.index = index;
+    }
+}
+
+public String restoreString(String s, int[] indices) {
+    char[] cArr = s.toCharArray();
+
+    ArrayList<Node> arrayList = new ArrayList<>();
+    for(int i=0; i < cArr.length; i++){
+        arrayList.add(new Node(cArr[i], indices[i]));
+    }
+
+    arrayList.sort(new Comparator<Node>(){
+
+        @Override
+        public int compare(Node o1, Node o2) {
+            return (o1.index > o2.index)?1:-1;
+        }
+
+    });
+
+    StringBuilder answer = new StringBuilder();
+    for(Node n : arrayList){
+        answer.append(n.c);
+    }
+    return answer.toString();
+}
