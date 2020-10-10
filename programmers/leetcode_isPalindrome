@@ -1,0 +1,17 @@
+public static boolean isPalindrome(int x) {
+      boolean answer = true;
+
+    char[] cArr = String.valueOf(x).toCharArray();
+    int left = 0;
+    int right = cArr.length-1;
+
+    while(left < right){
+        if(cArr[left] != cArr[right]){
+            answer = false;
+        }
+        left++;
+        right--;
+    }
+
+    return answer;
+}
