@@ -1,0 +1,24 @@
+class Solution {
+    public boolean isValid(String s) {
+        boolean answer = false;
+
+        char[] cArr = s.toCharArray();
+
+        Stack<Character> stack = new Stack<>();
+        for(int i=0 ; i < cArr.length; i++){
+            if(cArr[i] == '(' || cArr[i] == '{' || cArr[i] == '['){
+                stack.add(cArr[i]);
+            } else {
+                if(stack.isEmpty()) return false;
+                char c = stack.pop();
+                if(cArr[i] == ')' && c == '(') continue;
+                else if(cArr[i] == '}' && c == '{') continue;
+                else if(cArr[i] == ']' && c == '[') continue;
+                else return false;
+            }
+        }
+
+        if(stack.isEmpty()) answer = true;
+        return answer;
+    }
+}
