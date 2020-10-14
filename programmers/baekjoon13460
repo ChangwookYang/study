@@ -1,27 +1,132 @@
- public static void main(String[] args) {
+import java.util.*;
+
+
+public class Solution {
+    
+    static class Point {
+        public int rx, ry, bx, by, cnt;
+        public Point(int rx, int ry, int bx, int by, int cnt){
+            this.rx = rx;
+            this.ry = ry;
+            this.bx = bx;
+            this.by = by;
+            this.cnt = cnt;
+        }
+    }
+
+
+    static char[][] map = new char[10][10];
+    static int rows, columns;
+
+    public static void main(String[] args) {
 
         Scanner sc = new Scanner(System.in);
 
-        int rows = sc.nextInt();
-        int columns = sc.nextInt();
+        rows = sc.nextInt();
+        columns = sc.nextInt();
         
-        char[][] map = new char[rows][columns];
-        boolean[][] visited = new boolean[rows][columns];
-
-        for(int i=0; i<rows; i++){
-            String str = sc.next();
-            for(int j=0; j<columns; j++){
-                map[i][j] = str.charAt(j);
-            }    
+        for(int y=0; y < rows; y++){
+            String row = sc.next();
+            for(int x=0; x < columns; x++){
+                map[y][x] = row.charAt(x);
+            }
         }
 
+        int result = bfs();
 
-
-        sc.close();;
+        System.out.println(result);
     }
 
-    public static int mapSearch(char[][] map, boolean[][] visited){
-        int answer = 0;
+    public static int bfs() {
 
-        return answer;
+        
+        boolean[][][][] visited = new boolean[10][10][10][10];
+
+        int rx=0, ry=0, bx=0, by=0;
+        for(int y=0; y < rows; y++){
+            for(int x=0; x < columns; x++){
+                if(map[y][x] == 'R'){
+                    rx = x; ry = y;
+                } else if(map[y][x] == 'B'){
+                    bx = x; by = y;
+                }
+            }
+        }
+
+        visited[ry][rx][by][bx] = true;
+
+        Queue<Point> queue = new LinkedList<Point>();
+        Point start = new Point(rx, ry, bx, by, 0);
+        queue.add(start);
+
+        int[] dy = {1, -1, 0, 0};
+        int[] dx = {0, 0, -1, 1};
+        
+        int ret = -1;
+        while(!queue.isEmpty()){
+            Point cur = queue.poll();
+            if(cur.cnt > 10) break;
+            if(map[cur.ry][cur.rx] == 'O' && map[cur.by][cur.bx] != 'O'){
+                ret = cur.cnt;
+                break;
+            }
+
+            for(int dir=0; dir < 4; dir++){
+                int nextRx = cur.rx;
+                int nextRy = cur.ry;
+                int nextBx = cur.bx;
+                int nextBy = cur.by;
+                while(true) {
+                    if(map[nextRy][nextRx] != '#' && map[nextRy][nextRx] != 'O'){
+                        nextRx += dx[dir];
+                        nextRy += dy[dir];
+                    } else {
+                        if(map[nextRy][nextRx] == '#'){
+                            nextRx -= dx[dir];
+                            nextRy -= dy[dir];
+                        }
+                        break;
+                    }
+                }
+
+                while(true){
+                    if(map[nextBy][nextBx] != '#' && map[nextBy][nextBx] != 'O'){
+                        nextBx += dx[dir];
+                        nextBy += dy[dir];
+                    } else{
+                        if(map[nextBy][nextBx] == '#'){
+                            nextBx -= dx[dir];
+                            nextBy -= dy[dir];
+                        }
+                        break;
+                    }
+                }
+
+                if(nextRx == nextBx && nextRy == nextBy){
+                    if(map[nextRy][nextRx] != 'O'){
+                        int red_dist = Math.abs(nextRy - cur.ry) + Math.abs(nextRx - cur.rx);
+                        int blue_dist = Math.abs(nextBy - cur.by) + Math.abs(nextBx - cur.bx);
+                    
+                        if(red_dist > blue_dist){
+                            nextRx -= dx[dir];
+                            nextRy -= dy[dir];
+                        } else {
+                            nextBx -= dx[dir];
+                            nextBy -= dy[dir];
+                        }
+                    }
+                }
+
+                if(!visited[nextRy][nextRx][nextBy][nextBy]){
+                    visited[nextRy][nextRx][nextBy][nextBy] = true;
+                    queue.add(new Point(nextRx, nextRy, nextBx, nextBy, cur.cnt+1));
+                }
+            }
+
+
+        }
+        return ret;
+
     }
+
+}
