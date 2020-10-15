@@ -1,0 +1,35 @@
+import java.util.*;
+
+
+public class Main {
+    
+    public static void main(String[] args) {
+        
+
+        Scanner scan = new Scanner(System.in);
+        int N = scan.nextInt();
+        int[] T = new int[N+1];
+        int[] P = new int[N+1];
+
+        for(int i=1; i <= N; i++){
+            T[i] = scan.nextInt();
+            P[i] = scan.nextInt();
+        }
+
+        scan.close();
+
+        int[] MAX = new int[N+1];
+        
+        for(int i=1; i <= N; i++) {
+
+            int max = 0;
+            for(int j=1; j <= i; j++) {
+                int value = (T[j] < i - (j-1) + 1)? P[j]:0;
+                max = Math.max(max, Math.max(MAX[j], MAX[j-1] + value));
+            }
+            MAX[i] = max;
+        }
+
+        System.out.println(MAX[N]);
+    }
+}
