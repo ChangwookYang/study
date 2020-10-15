@@ -1,0 +1,113 @@
+import java.util.*;
+
+
+public class Main {
+    
+
+    static class Point {
+        int r;
+        int c;
+        public Point(int r, int c){
+            this.r = r;
+            this.c = c;
+        }
+    }
+    
+    static int[][] map = new int[8][8];
+    static int N, M, result;
+
+    static ArrayList<Point> virus = new ArrayList<>();
+
+    public static void main(String[] args) {
+    
+        Scanner scan = new Scanner(System.in);
+        N = scan.nextInt();
+        M = scan.nextInt();
+
+        for(int r=0; r < N; r++){
+            for(int c=0; c < M; c++){
+                map[r][c] = scan.nextInt();
+                if(map[r][c] == 2){
+                    virus.add(new Point(r, c));
+                }
+            }
+        }
+        scan.close();
+
+        result = Integer.MIN_VALUE;
+
+        dfs(0, 0, 0);
+
+        System.out.println(result);
+    }
+
+    static void bfs() {
+        Queue<Point> queue = new LinkedList<>();
+        for(Point v : virus){
+            queue.add(v);
+        }
+
+        int[] dy = {1, -1, 0, 0};
+        int[] dx = {0, 0, -1, 1};
+        while(!queue.isEmpty()){
+            Point p = queue.poll();
+
+            for(int i=0; i < 4; i++){
+                int nextY = p.r + dy[i];
+                int nextX = p.c + dx[i];
+                if(nextY < 0 || nextY >= N || nextX < 0 || nextX >= M) continue;
+                if(map[nextY][nextX] == 0){
+                    map[nextY][nextX] = 2;
+                    queue.add(new Point(nextY, nextX));
+                }
+            }
+        }
+
+        int candi = 0;
+        for(int r=0; r < N; r++){
+            for(int c=0; c < M; c++){
+                if(map[r][c] == 0){
+                    candi++;
+                }
+            }
+        }
+        if(candi > result) result = candi;
+
+
+        
+        for(int r=0; r < N; r++){
+            for(int c=0; c < M; c++){
+                if(map[r][c] == 2){
+                    map[r][c] = 0;
+                }
+            }
+        }
+
+        for(Point p : virus){
+            map[p.r][p.c] = 2;
+        }
+    }
+
+    static void dfs(int r, int c, int cnt) {
+        if(cnt == 3) {
+            bfs();
+            return;
+        }
+
+        for(int i = r; i < N; i++){
+            for(int j = c; j < M; j++){
+                if(map[i][j] == 0){
+                    map[i][j] = 1;
+                    if(j+1 == M) {
+                        dfs(i+1, j, cnt+1);
+                    } else {
+                        dfs(i, j+1, cnt+1);
+                    }
+                    map[i][j] = 0;
+                }
+            }
+            c=0;
+        }
+    }
+
+}
