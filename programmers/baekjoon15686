@@ -1,0 +1,67 @@
+static class Point {
+        int r;
+        int c;
+        public Point(int r, int c){
+            this.r = r;
+            this.c = c;
+        }
+    }
+    
+    static int[][] map = new int[51][51];
+    static boolean[][] visited = new boolean[51][51];
+    
+    static ArrayList<Point> houses   = new ArrayList<>();
+    static ArrayList<Point> chickens = new ArrayList<>();
+    static Stack<Point> pick = new Stack<>();
+    
+    static int N, M, result;
+
+    public static void main(String[] args) {
+    
+        Scanner scan = new Scanner(System.in);
+        N = scan.nextInt();
+        M = scan.nextInt();
+
+        for(int r=1; r <=N; r++){
+            for(int c=1; c <= N; c++){
+                map[r][c] = scan.nextInt();
+                if(map[r][c] == 1){
+                    // house
+                    houses.add(new Point(r, c));
+                } else if(map[r][c] == 2){
+                    // chicken
+                    chickens.add(new Point(r, c));
+                }
+            }
+        }
+        scan.close();
+
+        result = Integer.MAX_VALUE;
+        dfs(0);
+        
+        System.out.println(result);
+    }
+
+    static void dfs(int pos){
+        if(pick.size() == M){
+            int caseResult = 0;
+            for(Point h : houses){
+                int min = Integer.MAX_VALUE;
+                for(Point p : pick){
+                    min = Math.min(min, Math.abs(p.r-h.r) + Math.abs(p.c-h.c));
+                }
+                caseResult += min;
+            }
+
+            if(caseResult < result) result = caseResult;
+            return;
+        }
+
+        for(int i = pos; i < chickens.size(); i++){
+            Point p = chickens.get(i);
+            pick.push(new Point(p.r, p.c));
+            dfs(pos+1);
+            pick.pop();
+        }
+
+    }
