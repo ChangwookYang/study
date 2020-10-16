@@ -1,0 +1,189 @@
+import java.util.HashMap;
+
+import java.util.LinkedList;
+
+import java.util.Queue;
+
+import java.util.Scanner;
+
+ 
+
+ 
+
+public class Main {
+
+ 
+
+       static int[][] map = new int[101][101];
+
+      
+
+       public static void main(String[] args) {
+
+            
+
+             /*
+
+             게임은 NxN 정사각 보드위에서 진행되고, 몇몇 칸에는 사과가 놓여져 있다. 보드의 상하좌우 끝에 벽이 있다. 게임이 시작할때 뱀은 맨위 맨좌측에 위치하고 뱀의 길이는 1 이다. 뱀은 처음에 오른쪽을 향한다.
+
+             뱀은 매 초마다 이동을 하는데 다음과 같은 규칙을 따른다.
+
+             •      먼저 뱀은 몸길이를 늘려 머리를 다음칸에 위치시킨다.
+
+             •      만약 이동한 칸에 사과가 있다면, 그 칸에 있던 사과가 없어지고 꼬리는 움직이지 않는다.
+
+             •      만약 이동한 칸에 사과가 없다면, 몸길이를 줄여서 꼬리가 위치한 칸을 비워준다. 즉, 몸길이는 변하지 않는다.
+
+             사과의 위치와 뱀의 이동경로가 주어질 때 이 게임이 몇 초에 끝나는지 계산하라.
+
+ 
+
+             */
+
+             Scanner scan = new Scanner(System.in);
+
+             int N = scan.nextInt();    // 보드의 크기 N : 2~100
+
+             int K = scan.nextInt();    // 사과의 개수
+
+             // K줄 사과의 위치
+
+             for(int i=0; i< K ;i++){
+
+                    int r = scan.nextInt();
+
+                    int c = scan.nextInt();
+
+                    map[r][c] = 1;
+
+             }
+
+            
+
+             // 방향전환 횟수
+
+             int L = scan.nextInt();
+
+             HashMap<Integer, String> dirMap = new HashMap<Integer, String>();
+
+             for(int i=0; i< L ;i++){
+
+                    // s초가 끝난뒤에 L(왼쪽), D(오른쪽) 90도 방향회전
+
+                    // s는 10000이하의 양의 정수
+
+                    int s = scan.nextInt();
+
+                    String dir = (String)scan.next();
+
+                    dirMap.put(s, dir);
+
+             }
+
+            
+
+             int[] dy = {0, 1, 0, -1};
+
+             int[] dx = {1, 0, -1, 0};
+
+            
+
+             map[1][1] = -1;
+
+             int headY = 1;
+
+             int headX = 1;
+
+             Queue<Snake> snake = new LinkedList<Snake>();
+
+             snake.add(new Snake(headX, headY));
+
+ 
+
+             int time = 0;
+
+             int dir = 0;
+
+             while(true) {
+
+                    time++;
+
+ 
+
+                    headX += dx[dir];
+
+                    headY += dy[dir];
+
+                   
+
+                    if(dirMap.containsKey(time)){
+
+                           String newDir = dirMap.get(time);
+
+                           if(newDir.equals("L")){
+
+                                 // 좌측
+
+                                 dir = (dir+3) % 4;
+
+                           } else {
+
+                                 // 우측
+
+                                 dir = (dir+1) % 4;
+
+                           }
+
+                    }
+
+ 
+
+                    if(headX == 0 || headY == 0 || headX == N+1 || headY == N+1 || map[headY][headX] == -1){
+
+                           break;
+
+                    }
+
+                   
+
+                    if(map[headY][headX] == 0){
+
+                           Snake tail = snake.poll();
+
+                           map[tail.y][tail.x] = 0;
+
+                    }
+
+                   
+
+                    snake.add(new Snake(headX, headY));
+
+                    map[headY][headX] = -1;
+
+             }
+
+            
+
+             System.out.println(time);
+
+       }
+
+      
+
+       static class Snake {
+
+             public int x, y;
+
+             public Snake(int x, int y){
+
+                    this.x = x;
+
+                    this.y = y;
+
+             }
+
+       }
+
+ 
+
+}
