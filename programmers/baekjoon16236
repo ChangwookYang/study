@@ -1,0 +1,116 @@
+import java.util.*;
+
+
+public class Main {
+    
+
+    static class Shark {
+        public int x,  y, cnt;
+        public Shark(int x, int y, int cnt){
+            this.x = x;
+            this.y = y;
+            this.cnt = cnt;
+        }
+    }
+    
+    public static void main(String[] args) {
+        
+        Scanner scan = new Scanner(System.in);
+        
+        int N = scan.nextInt();
+        int[][] map = new int[N][N];
+
+        Shark shark = null;
+        for(int i=0; i < N; i++){
+            for(int j=0; j < N; j++){
+                map[i][j] = scan.nextInt();
+                if(map[i][j] == 9){
+                    shark = new Shark(j, i, 0);
+                    map[i][j] = 0;
+                }
+            }
+        }
+        scan.close();
+        
+        
+        int[] dirX = {1, -1, 0, 0};
+        int[] dirY = {0, 0, 1, -1};
+        int sharkSize = 2;
+        int sharkEatCnt = 0;
+
+        // 먹을 물고기가 있을때까지 계속 돈다. case
+        int time = 0;
+        while(true){
+            
+            boolean[][] visited = new boolean[N][N];
+            Queue<Shark> queue = new LinkedList<>();
+            visited[shark.y][shark.x] = true;
+            queue.add(shark);
+
+            int minCnt = -1;
+            ArrayList<Shark> candies = new ArrayList<>();
+            while(!queue.isEmpty()){
+                Shark cur = queue.poll();
+
+                if(minCnt != -1 && minCnt < cur.cnt) break;
+
+                if(map[cur.y][cur.x] > 0 && map[cur.y][cur.x] < sharkSize){
+                    candies.add(cur);
+                    minCnt = cur.cnt;
+                    continue;
+                }
+
+                for(int i=0; i < 4; i++){
+                    int nextY = cur.y + dirY[i];
+                    int nextX = cur.x + dirX[i];
+                    if(nextX < 0 || nextY < 0 || nextX == N || nextY == N || map[nextY][nextX] > sharkSize) continue;
+                    
+                    if(!visited[nextY][nextX]){
+                        visited[nextY][nextX] = true;
+                        queue.add(new Shark(nextX, nextY, cur.cnt + 1));
+                    }
+                }
+            }
+
+            if(candies.isEmpty()) break;
+            else {
+                int xIdx = 21;
+                int yIdx = 21;
+                for(Shark s : candies){
+                    if(s.cnt == minCnt){
+                        if(s.y < yIdx){
+                            yIdx = s.y;
+                            xIdx = s.x;
+                        } else if(s.y == yIdx && s.x < xIdx){
+                            yIdx = s.y;
+                            xIdx = s.x;
+                        }
+                    }
+                }
+                map[yIdx][xIdx] = 0;
+                time += minCnt;
+                sharkEatCnt++;
+                if(sharkEatCnt == sharkSize){
+                    sharkSize++;
+                    sharkEatCnt = 0;
+                }
+                    
+
+                shark = new Shark(xIdx, yIdx, 0);
+                for(int i=0; i < N; i++){
+                    for(int j=0; j < N; j++){
+                        System.out.print(map[i][j]);
+                    }
+                    System.out.println();
+                }
+            }
+        }
+
+
+        System.out.println(time);
+    }
+
+    
+
+
+}
