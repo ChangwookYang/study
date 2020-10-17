@@ -1,0 +1,41 @@
+import java.util.*;
+
+
+public class Main {
+    
+    
+    
+    public static void main(String[] args) {
+        
+        
+        Scanner scan = new Scanner(System.in);
+        
+        int N = scan.nextInt();
+        int[] places = new int[N];
+        for(int i=0; i < N; i++){
+            places[i] = scan.nextInt();
+        }
+        int B = scan.nextInt();
+        int C = scan.nextInt();
+        
+        scan.close();
+        
+        double cnt = 0;
+
+        for(int num : places){
+            cnt++; // B
+            int temp = num - B;
+            if(temp > 0){
+                int plus = (temp % C ==0)?0:1;
+                cnt += (temp / C) + plus;
+            }
+
+        }
+        
+        System.out.println(Math.round(cnt));
+    }
+
+    
+
+
+}
