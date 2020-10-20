@@ -1,0 +1,15 @@
+class Solution {
+    public int singleNumber(int[] nums) {
+        List<Integer> list = new LinkedList<>();
+        
+        for(Integer num : nums){
+            if(list.contains(num)){
+                list.remove(num);
+            } else {
+                list.add(num);
+            }
+        }
+        
+        return list.get(0);
+    }
+}
