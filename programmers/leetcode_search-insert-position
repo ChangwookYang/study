@@ -1,0 +1,28 @@
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int index = partitions(nums, target, 0, nums.length-1);
+
+        return index;
+    }
+    
+    int partitions(int[] nums, int target, int left, int right){
+        int answer = -1;
+        
+        if(left <= right){
+            int mid = (left + right)/2;
+            if(nums[mid] == target){
+                return mid;
+            } else if(nums[mid] < target){
+                answer = partitions(nums, target, mid+1, right);
+            } else {
+                answer = partitions(nums, target, left, mid-1);
+            }
+        } else {
+            answer = left;
+        }
+
+
+        return answer;
+    }
+
+}
