@@ -1,0 +1,40 @@
+class Solution {
+        
+    public int[] searchRange(int[] nums, int target) {
+        if(nums.length == 1 && nums[0] == target) return new int[]{0, 0};
+
+        int index = partitions(nums, target, 0, nums.length-1);
+
+        int min = -1;
+        int max = -1;
+        if(index > -1) {
+            min = index;
+            while(min > 0 && nums[min] == nums[min-1]){
+                min = min-1;
+            }
+            max = index;
+            while(max < nums.length-1 && nums[max] == nums[max+1]){
+                max = max+1;
+            }
+        }
+        return new int[]{min, max};
+    }
+    
+    int partitions(int[] nums, int target, int left, int right){
+        int answer = -1;
+        
+        if(left <= right){
+            int mid = (left + right)/2;
+            if(nums[mid] == target){
+                return mid;
+            } else if(nums[mid] < target){
+                answer = partitions(nums, target, mid+1, right);
+            } else {
+                answer = partitions(nums, target, left, mid-1);
+            }
+        }
+
+
+        return answer;
+    }
+}
