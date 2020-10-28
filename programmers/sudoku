@@ -1,0 +1,46 @@
+ public static boolean isValidSudoku(char[][] board) {
+        
+        for(int row = 0; row < 9; row++){
+            HashSet<Integer> set = new HashSet<>();
+            for(int col = 0; col < 9; col++){
+                if(board[row][col] == '.') continue;
+                else {
+                    Integer val = Integer.parseInt(String.valueOf(board[row][col]));
+                    if(set.contains(val)) return false;
+                    else set.add(val);
+                }
+            }
+            set.clear();
+        }
+
+        
+        for(int col = 0; col < 9; col++){
+            HashSet<Integer> set = new HashSet<>();
+            for(int row = 0; row < 9; row++){
+                if(board[row][col] == '.') continue;
+                else {
+                    Integer val = Integer.parseInt(String.valueOf(board[row][col]));
+                    if(set.contains(val)) return false;
+                    else set.add(val);
+                }
+            }
+            set.clear();
+        }
+
+
+        for(int index = 0; index < 3; index++){
+            HashSet<Integer> set = new HashSet<>();
+            for(int row = 3*index; row < 3*index + 3; row++){
+                for(int col = 3*row; col < 3*row + 3; col++){
+                    if(board[row][col] == '.') continue;
+                    else {
+                        Integer val = Integer.parseInt(String.valueOf(board[row][col]));
+                        if(set.contains(val)) return false;
+                        else set.add(val);
+                    }
+                }
+            }
+            set.clear();
+        }
+        return true;
+    }
