@@ -1,0 +1,13 @@
+class Solution {
+    public int[] plusOne(int[] digits) {
+        int[] result = new int[digits.length];
+
+        int index =0;
+        for(int a : digits){
+            if(index == digits.length-1) a++;
+            result[index++] = a;
+        }
+
+        return result;
+    }
+}
