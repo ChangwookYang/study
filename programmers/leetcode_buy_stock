@@ -1,0 +1,17 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int result = 0;
+
+        int idxOfVal = 1;
+        for(Integer val : prices) {
+            for(int i = idxOfVal ; i < prices.length; i++){
+                if(prices[i] - val > result) {
+                    result = prices[i] - val;
+                }
+            }
+            idxOfVal++;
+        }
+
+        return result;
+    }
+}
