@@ -21,5 +21,9 @@ public class ResponseHeaderServlet extends HttpServlet {
         response.setHeader("my-header", "hello");
 
         response.getWriter().println("hello");
+
+        response.getWriter().println("hello");
+
+        response.getWriter().println("hello");
     }
 }
