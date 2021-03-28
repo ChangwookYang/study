@@ -20,6 +20,5 @@ public class ResponseHeaderServlet extends HttpServlet {
         response.setHeader("Pragma", "no-cache");
         response.setHeader("my-header", "hello");
 
-        response.getWriter().println("hello");
     }
 }
