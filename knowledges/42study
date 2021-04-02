@@ -1,0 +1,42 @@
+**4/2 (금)**
+
+**redirect vs forward**
+
+리다이렉트는 실제 클라이언트에 응답이 나갔다가 클라이언트가 redirect 경로로 다시 요청한다.
+
+따라서 클라이언트가 인지할 수 있고, url 경로도 실제로 변경된다.
+
+반면에 포워드는 서버 내부에서 일어나는 호출이기에 클라이언트가 전혀 인지하지 못한다.
+
+**MVC 한계**
+
+MVC 패턴으로 적용한 덕에 컨트롤러의 역할과 뷰를 렌더링하는 역할을 명확하게 구분할 수 있다.
+
+그러나 컨트롤러는 중복이 많고 필요하지 않는 코드들도 많이 보인다.
+
+단점1) 포워드 중복 : View로 이동하는 코드가 항상 중복 호출되어야 한다.
+
+```java
+RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
+dispatcher.forward(request, response);
+```
+
+단점2) ViewPath에 중복
+
+```java
+String viewPath = "/WEB-INF/views/new-form.jsp";
+```
+
+단점3) 사용하지 않는 코드 : 다음코드를 사용할 때도 있고 사용안할때도 있다.
+
+```java
+HttpServletRequest request, HttpServletResponse response
+```
+
+단점4) 공통처리가 어렵다. : 기능이 복잡해질 수록 공통처리해야하는 부분이 더 많이 증가한다.
+
+공통처리가 어려운 문제를 해결하기 위해서는 컨트롤러 호출 전에 먼저 공통 기능을 처리해야한다.
+
+소위 수문장 역할을 하는 기능이 필요하다. 프론트 컨트롤러(Front Controller) 패턴을 도입하면
+
+입구를 하나로 하면, 해당 문제를 해결할 수 있다.
