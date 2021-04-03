@@ -1,0 +1,47 @@
+##### FrontController 패턴 특징
+
+* 프론트 컨트롤러 서블릿 하나로 클라이언트의 요청을 받음.(입구를 하나로!-공통처리 가능)
+* 프론트 컨트롤러가 요청에 맞는 컨트롤러를 찾아서 호출한다.
+* 프론트 컨트롤러를 제외한 나머지 컨트롤러는 서블릿을 사용하지 않아도 된다.
+
+##### 스프링 웹 MVC와 프론트 컨트롤러
+
+* 스프링 웹 MVC의 핵심도 바로 FrontController이다.
+* 스프링 웹 MVC의 DispatcherServlet이 FrontController 패턴으로 구현되어 있다.
+
+
+
+서블릿과 비슷한 모양의 컨트롤러 인터페이스를 도입한다. 각 컨트롤러들은 이 인터페이스를 구현하면 된다.
+```java
+public interface ControllerV1 {
+    void process(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IoException;
+}
+```
+
+```java
+// V2 : 모든 컨트롤러에서 뷰로 이동하는 부분에 중복이 있어서 공통처리
+public interface ControllerV2 {
+    MyView process(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException;
+}
+```
+
+```java
+// V3 : Model 추가
+// HttpServletRequest, HttpServletResponse를 자바의 Map으로 대신 넘기게 한다.
+// 뷰 이름 중복 제거 : 뷰의 논리 이름을 반환
+public interface ControllerV3 {
+    ModelView process(Map<String, String> paramMap);
+}
+```
+
+```java
+// V4
+public interface ControllerV4 {
+    String process(Map<String, String> paramMap, Map<String, Object> model);
+}
+```
+
+
+
