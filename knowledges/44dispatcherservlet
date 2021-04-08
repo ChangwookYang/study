@@ -37,4 +37,4 @@ FrameworkServlet.service()를 시작으로 여러 메서드가 호출되면서 D
 7. View반환 : 뷰 리졸버는 뷰의 논리이름을 물리이름으로 바꾸고 렌더링 역할을 담당하는 뷰 객체를 반환
 8. 뷰 렌더링 : 뷰를 통해서 뷰를 렌더링한다.
 
-https://blog.kakaocdn.net/dn/MRXX3/btqK7014LOZ/wMKgG9RVkdZR7Ag5nD4wh0/img.png
+![image](https://blog.kakaocdn.net/dn/MRXX3/btqK7014LOZ/wMKgG9RVkdZR7Ag5nD4wh0/img.png)
