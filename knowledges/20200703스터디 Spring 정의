@@ -2,7 +2,6 @@ Spring 프래임워크란?
 
 IoC와 AOP를 지원하는 경량의 컨테이너 프레임워크
 
-
 - 경량(두 가지 이유)
 
            1. 모듈들이 jar파일로 묶여있다.
@@ -12,14 +11,10 @@ IoC와 AOP를 지원하는 경량의 컨테이너 프레임워크
               ex) Servlet 같은 경우는 doGet, doPost 등의 제약이 있는 것이 차이점
 
              
-
 - 컨테이너
-
            객체의 인스턴스 생성, 생명주기를 관리
-
            프로그래머가 작성한 코드를 스스로 참조한 뒤 알아서 객체의 생성과 소멸을 컨트롤해준다.
 
-          
 
 - IoC(Inversion of Conversion, 제어의 역행)
 
@@ -74,7 +69,6 @@ IoC와 AOP를 지원하는 경량의 컨테이너 프레임워크
                      <property name="speaker" ref="samsungSpeaker" />
 
            </bean>
-
           
 
            -> 참고
