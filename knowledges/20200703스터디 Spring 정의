@@ -9,6 +9,7 @@ IoC와 AOP를 지원하는 경량의 컨테이너 프레임워크
            2. POJO(Plain Old Java Object) 지원하여 형식 제약이 없다
 
               ex) Servlet 같은 경우는 doGet, doPost 등의 제약이 있는 것이 차이점
+              
 
              
 - 컨테이너
