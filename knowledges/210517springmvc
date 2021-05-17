@@ -1,0 +1,54 @@
+스프링부트로 프로젝트 생성 - was 서버를 내장하여 톰캣 서버 설치없이 서블릿코드를 실행할 수 있다.
+
+* 프로젝트 생성
+http://start.spring.io/
+
+war르 생성하여 jsp 생성
+
+Spring web에 tomcat내장
+
+Cntl + o : service 메소드 호출(protected)
+
+@WebServlet(name = "helloServlet", urlPatterns = "/hello")
+public class HelloServlet extends HttpServlet {
+
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("HelloServlet.service");
+        System.out.println("req = " + req);
+        System.out.println("resp = " + resp);
+
+        String username = req.getParameter("username");
+        System.out.println("username = " + username);
+
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("utf-8");
+        resp.getWriter().write("hello " + username); // body
+
+    }
+}
+
+* @WebServlet : 서블릿 어노테이션
+    * Name : 서블릿 이름, urlPatterns : URL 매핑
+    * HTTP 요청을 통해 매핑된 URL이 호출되면 서블릿 컨테이너는 다음 메서드를 실행한다.
+    * protected void service(HTTPServletRequest request, HTTPServletResponse response)
+
+* 서블릿 로그 레벨 설정
+    * logging.level.org.apache.coyote.http11=debug
+    
+    * HttpServletRequest
+    * HTTP 요청메시지를 편리하게 사용할 수 있도록 HTTP 요청 메시지를 파싱한다.
+    * 해당 HTTP 요청이 시작부터 끝날때까지 유지되는 임시 저장소 기능
+        * 저장 : request.setAttribute(name, value)
+        * 조회 : request.getAttribute(name)
+    * 세션 관리 기능 : request.getSession(create:true)
+
+* HTTP 요청 데이터
+    * GET - 쿼리 파라미터
+        * /url?username=hello&age=20
+        * 메시지 바디 없이, URL의 쿼리 파라미터에 데이터를 포함해서 전달
+    * POST - HTML Form
+        * Content-type: application/x-www-form-urlencoded
+        * 메시지 바디에 쿼리 파라미터 형식으로 전달 username=hello&age=20
+    * HTTP message body에 데이터를 직접 담아서 요청
+        * HTTP API에서 주로 사용
