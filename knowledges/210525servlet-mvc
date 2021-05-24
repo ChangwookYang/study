@@ -50,3 +50,15 @@ HttpServletRequest request, HttpServletResponse response;
 
 공통처리는 어려우므로 컨트롤러 호출 전에 먼저 공통 처리를 해야한다.
 즉, 수문장 역할을 하는 프론트 컨트롤러(Front Controller) 패턴이 필요하다.
+
+
+프론트 컨트롤러 소개
+
+* FrontController의 특징
+    * 프론트 컨트롤러 서블릿 하나로 클라이언트 요청을 받음
+    * 프론트 컨트롤러가 요청에 맞는 컨트롤러를 찾아서 호출
+    * 입구를 하나로!
+    * 공통처리 가능
+    * 프론트 컨트롤러를 제외한 나머지 컨트롤러는 서블릿을 사용하지 않아도 됨.
+* 스프링 웹 MVC의 핵심도 바로 FrontController
+    * 스프링 웹 MVC의 DispatcherServlet이 FrontController 패턴으로 구현되어 있다!
