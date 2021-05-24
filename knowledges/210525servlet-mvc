@@ -31,3 +31,22 @@ public class MvcMemberListServlet extends HttpServlet {
     }
 
 }
+
+한계
+
+포워드 중복
+RequestDispatcher dispatcher = request.getRequestDispacher(viewPath);
+dispatcher.forward(request, response);
+
+ViewPath 중복
+String viewPath = “/WEB-INF/views/new-form.jsp“; 
+
+사용하지 않는 코드
+HttpServletRequest request, HttpServletResponse response;
+특히 response는 사용되지 않음
+
+공통 처리가 어렵다.
+공통처리를 하더라도 함수를 호출해야하는게 불편하다
+
+공통처리는 어려우므로 컨트롤러 호출 전에 먼저 공통 처리를 해야한다.
+즉, 수문장 역할을 하는 프론트 컨트롤러(Front Controller) 패턴이 필요하다.
