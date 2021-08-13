@@ -1,0 +1,47 @@
+기본 명령어
+
+ALTER TABLE `테이블명` ADD `새컬럼명` 자료형 AFTER `앞컬럼명`
+
+
+ALTER TABLE withdraw_user MODIFY COLUMN withdraw_dt DATETIME DEFAULT NULL;
+ALTER TABLE withdraw_user MODIFY COLUMN withdraw_dt DATETIME NOT NULL;
+
+
+테이블 생성
+create table [테이블명](id int,name varchar(20));
+ 
+컬럼 추가
+alter table [테이블명] add [컬럼명] [타입] [옵션]; 
+ex) alter table [테이블명] add [컬럼명] varchar(100) not null default '0'; 
+ 
+컬럼 삭제
+alter table [테이블명] drop [컬럼명];
+ 
+컬럼명 변경 및 타입 변경
+alter table [테이블명] change [컬럼명] [변경할컬럼명] varchar(12);
+ 
+컬럼 타입 수정
+alter table [테이블명] modify [컬럼명] varchar(14);
+ 
+테이블명 수정
+alter table [테이블명] rename [변경할테이블명];
+ 
+테이블 삭제
+drop table [테이블명];
+
+
+1.foreign key 추가
+alter table [추가할테이블명] add constraint [제약조건명] foreign key(컬럼명)
+references [부모테이블명] (PK컬럼명) [ON DELETE CASCADE / ON UPDATE CASECADE];
+
+* 		ON DELETE CASCADE 외래 키에서 참조하는 키가 포함된 행을 삭제하려고 하면 해당 외래 키가 포함되어 있는 모든 행도 삭제 
+* 		ON UPDATE CASCADE 외래 키에서 참조하는 키 값이 포함된 행에서 키 값을 업데이트 하면 해당 외래 키를 구성하는 모든 값도 키에 지정된 새 값으로 업데이트되도록 지정 
+2. foreign key 삭제
+alter table [테이블명] drop foreign key [제약조건명];
+3. foreign key 확인 방법
+3.1 테이블 기준 확인
+select * from information_schema.table_constraints where table_name = '테이블명';
+3.2 데이터베이스 기준 확인
+select * from information_schema.table_constraints where constraint_schema = '데이터베이스명';
+
+
