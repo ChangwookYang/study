@@ -6,7 +6,7 @@ ALTER TABLE `테이블명` ADD `새컬럼명` 자료형 AFTER `앞컬럼명`
 ALTER TABLE withdraw_user MODIFY COLUMN withdraw_dt DATETIME DEFAULT NULL;
 ALTER TABLE withdraw_user MODIFY COLUMN withdraw_dt DATETIME NOT NULL;
 
-
+ 
 테이블 생성
 create table [테이블명](id int,name varchar(20));
  
