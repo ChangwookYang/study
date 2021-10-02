@@ -1,0 +1,99 @@
+빅너드 랜치의 코틀린 프로그래밍
+
+Chapter 1. 첫번째 코틀린 애플리케이션 작성하기
+* 코틀린에서는 JDK의 자바 라이브러리를 사용하여 코틀린 코드를 자바 바이트 코드로 변환하므로 JDK가 필요하다.
+* *.iml 파일은 한 모듈에 특정한 구성 정보를 포함한다.
+* .idea폴더는 인텔리제이 프로젝트에 관련된 상태 정보(편집기에 열었던 파일들)
+* Kotlin REPL (read, evaluate, print, loop)
+    * 파일을 생성하지 않고 코드를. 빨리 테스트하는 도구
+    * Command + Return
+
+Chapter 2. 변수, 상수, 타입
+* 값이 변경될 수 있는 변수는 var(variable)
+* 읽기 전용 변수는 val(value)
+* 타입 추론 : 변수를 선언할때는 타입을 생략해도 되며 생략하거나 지정하는 모든 경우에서 코틀린 컴파일러가 변수타입을 알고 처리해준다.
+* 타입을 알고 싶을 경우에는 Control + Shift + P 키를 누르면 타입을 인텔리제이가 알려준다.
+* Val 변수가 다른 값을 반환하는 특별한 경우가 있다. 따라서 컴파일 시점 상수의 사용을 고려해야한다.
+* 컴파일 시점 상순는 main함수를 포함해서 모든 함수의 외부에 정의되어야한다. 컴파일 시점, 즉 프로그램이 컴파일 될때 값이 지정되어야 하기 때문이다. main과 이외의 다른 함수들은 런타임, 즉 프로그램이 실행되는 동안 호출되며, 모든 함수의 내부에 선언된 변수들은 그때 생성되어 지정된다. 반면에 컴파일 시점 상수는 프로그램 실행 전에 생성과 초기화 된다. const를 val앞에 추가하여 이 변수의 값이 절대 변경이 되지 않음을 컴파일러에 알려 준다.
+* 코틀린을 바이트코드로 살펴볼 수 있다. Shift키 두번 누리고 Show Kotlin Bytecode를 입력한다.
+* 자바의 모든 기본 타입은 대응되는 참조타입이 있다. 자바와 달리 코틀린은 참조 타입만 제공한다. 예로 int 대신에 Int를 사용한다. 코틀린 컴파일러는 가능한한 자바 바이트코드의 기본 타입을 선택하여 좋은 성능을 제공한다.
+
+Chapter 3. 조건문과 조건식
+* 조건 표현식
+    * var healthStatus = if(healthPoints = 100) “최상” else “최악”
+* 범위
+    * if(healthPoints in 90..99)
+* When 표현식
+    * var healthStatus = when(healthPoints) {
+			100 -> "최상"
+			99 -> "아야야"
+			in 50..98 -> "크윽"
+			else -> "최악"
+		}
+* 문자열 템플릿
+    * 문자열 값 안에 변수의 값을 포함시킬 수 있다.
+    * $ 기호가 문자열 템플릿을 나타내며 큰따옴표 내부의 문자열에 var이나 val 변수값을 넣을수 있다.
+        * println("$status $name $healthPoints")
+    * $ 기호 다음에 중광호 내부에 표현식을 넣을수도 있다.
+        * val isBlessed = true; println("(Blessed : ${if (isBlessed) "YES" else "NO"}")
+
+Chapter 4. 함수
+* private fun funcTest(healthPoints: Int): String { … }
+* 단일 표현식 함수 : 하나의 표현식만 갖는 함수
+    * private fun castFireball(numFireballs: Int = 2) =      println(“한 덩어리의 파이어볼”);
+* Unit 함수 : 반환 타입과 return 키워드를 하지 않으면 반환 타입은 Unit으로 간주 된다.
+    * 기존의 void는 제네릭 함수를 구현할 수 있는 방법이 없다.
+    * 코틀린은 아무것도 반환하지 않는 반환타입 Unit이 있다.
+* 지명 함수 인자 : 함수에 인자를 전달할때 명시적으로 전달하는 방법
+* Nothing 타입 : 함수의 실행이 끝나더라도 호출 코드로 복귀되지 않는다.
+    * 의도적으로 예외를 발생시킬 때 사용할 수 있다.
+    * 예로, TODO 함수에 사용되어 의도적으로 예외 exception을 발생시킨다.
+    * 굳이 리턴을 미리 다른 값으로 지정해놓을 필요 없음!
+
+Chapter 5. 익명 함수와 함수 타입
+* 익명함수는 크게 두가지가 다르다
+    * 함수 정의 부분에 이름이 없다는 것
+    * 다른 함수의 인자로 전달되거나 반환되는 형태로 사용되는 것
+        * 함수 타입과 함수 인자 형태로 사용하기 때문에 가능하다.
+* 익명 함수는 중괄호 사이에 표현식이나 명령문을 넣어서 작성한다. 또한, 중괄호 다음에 빈괄호를 사용하여 이 함수를 호출한다. println({
+   			 val age = 50;
+    			"환영합니다!!!! 당신은 $age 이시군요"
+		}());
+* 함수 타입
+    * 익명함수를 저장하는 변수를 정의할 수 있다.
+    * 익명함수를 저장하는 변수는 변수 이름 다음에 콜론(:)과 함수타입을 지정하여 선언한다.
+    * greetingFunction: () -> String
+        * 인자를 받지않고 String을 반환하는 어떤 함수도 greetingFunction변수에 지정될 수 있음
+* 암시적 반환
+    * 이름 있는 함수와 다르게 익명함수는 데이터 반환을 위한 return키워드가 필요 없다.
+    * 익명 함수는 암시적으로 또는 자동으로 함수 정의의 마지막 코드 결과를 반환한다.
+* 함수 인자
+    * val greetingFunction: (String) -> String = { playerName -> 
+* it 키워드
+    * 하나의 인자만 받는 매개변수 이름을 지정하는 대신 편리하게 it 키워드를 사용할 수 있다.
+    * val greetingFunction: (String) -> String = {
+* 다수의 인자 받기
+    * val greetingFunction: (String, Int) -> String = { playerName, numBuildings ->
+* 타입 추론 지원
+    * val greetingFunction: () -> String = {
+        * val greetingFunction = {
+    * val greetingFunction: (String, Int) -> String = { playerName, numBuildings ->
+        * val greetingFunction = { playerName: String, numBuildings: Int ->
+* 함수를 인자로 받는 함수 정의하기
+    * 익명함수 = 람다
+    * 함수 매개 변수는 함수를 포함해서 어떤 타입의 인자도 받을 수 있다a.
+    * Fun runSimulation(playerName: String, greetingFunction: (String, Int) -> String) {
+* 단축 문법
+    * 함수에서 마지막 매개변수로 함수 타입을 받을 때 람다 인자를 둘러싼 괄호를 생략할 수 있다.
+        * “Mississippi”.count({it == ’s’ })
+            * “Mississippi”.count { it == ’s’ }
+* 인라인 함수로 만들기
+    * 람다를 정의하면 JVM에서 객체로 생성된다.
+    * JVM은 람다를 사용하는 모든 변수의 메모리 할당을 수행하므로 메모리가 많이 사용된다.
+    * 따라서 코틀린에서는 다른 함수의 인자로 람다를 사용할 때 부담을 없앨 수 있는 인라인이라는 최적화 방법을 제공한다.
+    * 람다를 인라인 처리하려면 람다를 인자로 받는 함수에 inline키워드를 지정하면 된다.
+    * inline키워드를 추가하면 runSimulation 함수가 호출될때 람다가 객체로 전달되지 않는다.
+    * inline fun runSimulation(playerName: String, greetingFunction: (String, Int) -> String) {
+* 함수 참조
+    * 람다를 사용해서 다른 함수의 인자로 함수를 전달하는거 외에도 함수 참조로 인자를 전달할 수 있다.
+    * 
