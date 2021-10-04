@@ -97,3 +97,9 @@ Chapter 5. 익명 함수와 함수 타입
 * 함수 참조
     * 람다를 사용해서 다른 함수의 인자로 함수를 전달하는거 외에도 함수 참조로 인자를 전달할 수 있다.
     * 
+
+
+* Kotlin extension 함수 : https://blog.yena.io/studynote/2020/04/15/Kotlin-Scope-Functions.html
+
+
+
